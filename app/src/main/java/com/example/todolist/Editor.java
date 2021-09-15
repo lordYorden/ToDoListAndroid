@@ -34,7 +34,7 @@ public class Editor extends AppCompatActivity implements View.OnClickListener {
     TextView display_info;
     Button resetTasks_btn;
     String imagePath;
-    EditText task_et;
+    EditText task_et, date_et;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,7 @@ public class Editor extends AppCompatActivity implements View.OnClickListener {
         display_info = findViewById(R.id.display_info);
         add_btn = findViewById(R.id.addToFile_btn);
         task_et = findViewById(R.id.task_et);
+        date_et = findViewById(R.id.date_et);
         resetTasks_btn = findViewById(R.id.resetTasks_btn);
 
         add_btn.setOnClickListener(this);
@@ -98,7 +99,7 @@ public class Editor extends AppCompatActivity implements View.OnClickListener {
         }
         else if (v == add_btn)
         {
-            String data = task_et.getText() + "=" + imagePath + "\n";
+            String data = task_et.getText() + "=" + imagePath + "=" + date_et.getText() + "\n";
             writeToFile(data, this);
         }
         else if(v == resetTasks_btn)

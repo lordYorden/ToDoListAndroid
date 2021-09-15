@@ -40,6 +40,14 @@
             tools:layout_editor_absoluteX="100dp"
             tools:layout_editor_absoluteY="133dp" />
 
+        <EditText
+            android:id="@+id/date_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="date"
+            android:inputType="date" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

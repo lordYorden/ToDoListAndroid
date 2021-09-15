@@ -1,18 +1,22 @@
 package com.example.todolist;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 
-public class TodoNode {
+public class Task {
     String Task;
     String pic;
+    Date doDate;
 
-    TodoNode(String Task, String pic)
+    Task(String Task, String pic, Date doDate)
     {
         this.pic = pic;
         this.Task = Task;
+        this.doDate = doDate;
     }
 
-        public String getPic() {
+    public String getPic() {
         return pic;
     }
 

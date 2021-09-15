@@ -2,32 +2,20 @@ package com.example.todolist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    LinkedList<TodoNode> arr = new LinkedList<TodoNode>();
+    public static ArrayList<Task> arr = new ArrayList<Task>();
     ImageView pic;
     CheckBox check_btn;
     Button reset_btn;
@@ -38,14 +26,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        arr.add(new TodoNode("ex1", "/external/images/media/335"));
-        arr.add(new TodoNode("ex2", "/external/images/media/335"));
-        arr.add(new TodoNode("ex3", "/external/images/media/335"));
-        arr.add(new TodoNode("ex4","/external/images/media/335"));
-        arr.add(new TodoNode("ex5","/external/images/media/335"));
-        arr.add(new TodoNode("ex6", "/external/images/media/335"));
-
 
         pic = findViewById(R.id.display_iv);
         check_btn = findViewById(R.id.checkbox_btn);
@@ -68,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         else if (v == reset_btn) {
-            readFromFileToLinkedList("tasks.txt", this);
+            ServiceHandler.readFromFileToArr("tasks.txt", this, arr);
             displayNextNode();
         }
         else if (v == editor_switch_btn) {
@@ -77,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public Bitmap imageFromFile(String filePath) throws FileNotFoundException
+    /*public Bitmap imageFromFile(String filePath) throws FileNotFoundException
     {
         File imgFile = new File(filePath);
         if(imgFile.exists())
@@ -96,9 +76,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             throw new FileNotFoundException("Could not find " + filePath);
         }
-    }
+    }*/
 
-    private void readFromFileToLinkedList(String filePath, Context context) {
+   /* private void readFromFileToLinkedList(String filePath, Context context) {
         arr.clear();
         try {
             InputStream inputStream = context.openFileInput(filePath);
@@ -112,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 while ( (receiveString = bufferedReader.readLine()) != null ) {
                     if(!receiveString.equals("")) {
                         String[] strList = receiveString.split("=");
+                        Toast.makeText(context, "added node", Toast.LENGTH_SHORT).show();
                         arr.add(new TodoNode(strList[0], strList[1]));
                     }
                 }
@@ -124,14 +105,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
         }
-    }
+    }*/
 
     public void displayNextNode()
     {
-        TodoNode curr = arr.get(i);
+        Task curr = arr.get(i);
         try
         {
-            pic.setImageBitmap(imageFromFile(curr.pic));
+            pic.setImageBitmap(ServiceHandler.imageFromFile(curr.pic));
         }
         catch (FileNotFoundException e)
         {
@@ -140,5 +121,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         check_btn.setText(curr.Task);
         check_btn.setChecked(false);
+        Toast.makeText(this, ServiceHandler.foramt.format(curr.doDate), Toast.LENGTH_SHORT).show();
     }
 }
