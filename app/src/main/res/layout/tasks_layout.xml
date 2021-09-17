@@ -10,13 +10,15 @@
         android:id="@+id/pic_iv"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_weight="1"
         app:srcCompat="@drawable/example" />
 
     <LinearLayout
-        android:layout_width="100dp"
+        android:layout_width="170dp"
         android:layout_height="100dp"
-        android:layout_weight="1"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -24,8 +26,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|left"
-            android:paddingLeft="10dp"
-            android:text="watch a movie"/>
+            android:autoText="true"
+            android:text="watch a movie"
+            android:textIsSelectable="true"
+            app:autoSizeTextType="uniform" />
 
     </LinearLayout>
 

@@ -121,6 +121,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         check_btn.setText(curr.Task);
         check_btn.setChecked(false);
-        Toast.makeText(this, ServiceHandler.foramt.format(curr.doDate), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, ServiceHandler.format.format(curr.doDate), Toast.LENGTH_SHORT).show();
     }
 }
