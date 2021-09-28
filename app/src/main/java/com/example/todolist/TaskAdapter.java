@@ -23,8 +23,8 @@ import java.util.ArrayList;
 public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.OnCheckedChangeListener {
     Context context;
     ArrayList<Task> objects;
-    CheckBox fin_cb;
-    TextView task_tv;
+/*    CheckBox fin_cb;
+    TextView task_tv;*/
 
     public TaskAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull ArrayList<Task> objects) {
         super(context, resource, textViewResourceId, objects);
@@ -37,6 +37,9 @@ public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.On
     public View getView(int bitmap, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater layoutInflater = ((Activity)context).getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.tasks_layout, parent, false);
+
+        CheckBox fin_cb;
+        TextView task_tv;
 
         ImageView pic = view.findViewById(R.id.pic_iv);
         TextView date_tv = view.findViewById(R.id.date_tv);
@@ -64,11 +67,18 @@ public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.On
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked)
+        if(isChecked) {
+            //gets the curr view and components
+            View view = (View) buttonView.getParent().getParent();
+            CheckBox fin_cb = view.findViewById(R.id.fin_cb);
+            TextView task_tv = view.findViewById(R.id.task_tv);
+            //*debug* notify user
             Toast.makeText(context, "task fin!", Toast.LENGTH_SHORT).show();
+            //finish & marks task
             fin_cb.setChecked(false);
             fin_cb.setClickable(false);
             task_tv.setPaintFlags(task_tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
 
     }
 }
