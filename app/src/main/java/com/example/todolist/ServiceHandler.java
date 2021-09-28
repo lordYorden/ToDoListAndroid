@@ -60,6 +60,7 @@ public class ServiceHandler {
     }
 
     public static void readFromFileToArr(String filePath, Context context, ArrayList<Task> arr) {
+
         arr.clear();
         try {
             InputStream inputStream = context.openFileInput(filePath);
@@ -70,14 +71,14 @@ public class ServiceHandler {
                 String receiveString = "";
                 StringBuilder stringBuilder = new StringBuilder();
 
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    if(!receiveString.equals("")) {
+                 do{
+                    receiveString = bufferedReader.readLine();
+                    if(receiveString != null && !receiveString.equals("")) {
                         String[] strList = receiveString.split("=");
                         /*Toast.makeText(context, "added node", Toast.LENGTH_SHORT).show();*/
                         arr.add(new Task(strList[0], strList[1], format.parse(strList[2])));
                     }
-                }
-
+                } while (receiveString != null );
                 inputStream.close();
             }
         }

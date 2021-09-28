@@ -2,10 +2,13 @@ package com.example.todolist;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,9 +19,12 @@ import androidx.annotation.Nullable;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class TaskAdapter extends ArrayAdapter<Task> {
+
+public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.OnCheckedChangeListener {
     Context context;
     ArrayList<Task> objects;
+    CheckBox fin_cb;
+    TextView task_tv;
 
     public TaskAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull ArrayList<Task> objects) {
         super(context, resource, textViewResourceId, objects);
@@ -34,7 +40,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
         ImageView pic = view.findViewById(R.id.pic_iv);
         TextView date_tv = view.findViewById(R.id.date_tv);
-        TextView task_tv = view.findViewById(R.id.task_tv);
+        task_tv = view.findViewById(R.id.task_tv);
+        fin_cb = view.findViewById(R.id.fin_cb);
 
         Task temp = objects.get(bitmap);
 
@@ -50,7 +57,18 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
         date_tv.setText(ServiceHandler.format.format(temp.doDate));
         task_tv.setText(temp.Task);
+        fin_cb.setOnCheckedChangeListener(this);
 
         return view;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(isChecked)
+            Toast.makeText(context, "task fin!", Toast.LENGTH_SHORT).show();
+            fin_cb.setChecked(false);
+            fin_cb.setClickable(false);
+            task_tv.setPaintFlags(task_tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
     }
 }
