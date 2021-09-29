@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ToDoList</string>
+    <string-array name="sort_types">
+        <item>No Selection</item>
+        <item>Sort by name [a-z]</item>
+        <item>Sort by name [z-a]</item>
+        <item>Sort by date [nearest first]</item>
+        <item>Sort by date [latest first]</item>
+    </string-array>
 </resources>

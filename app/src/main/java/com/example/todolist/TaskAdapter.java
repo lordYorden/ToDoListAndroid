@@ -59,7 +59,7 @@ public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.On
         }
 
         date_tv.setText(ServiceHandler.format.format(temp.doDate));
-        task_tv.setText(temp.Task);
+        task_tv.setText(temp.task);
         fin_cb.setOnCheckedChangeListener(this);
 
         return view;

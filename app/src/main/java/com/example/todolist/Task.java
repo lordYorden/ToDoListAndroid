@@ -1,18 +1,16 @@
 package com.example.todolist;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedList;
 
 public class Task {
-    String Task;
+    String task;
     String pic;
     Date doDate;
 
     Task(String Task, String pic, Date doDate)
     {
         this.pic = pic;
-        this.Task = Task;
+        this.task = Task;
         this.doDate = doDate;
     }
 
@@ -21,7 +19,15 @@ public class Task {
     }
 
     public String getTask() {
-        return Task;
+        return task;
+    }
+
+    public Date getDoDate() {
+        return doDate;
+    }
+
+    public void setDoDate(Date doDate) {
+        this.doDate = doDate;
     }
 
     public void setPic(String pic) {
@@ -29,6 +35,6 @@ public class Task {
     }
 
     public void setTask(String task) {
-        Task = task;
+        this.task = task;
     }
 }

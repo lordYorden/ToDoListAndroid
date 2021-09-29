@@ -9,16 +9,44 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Settings extends AppCompatActivity implements View.OnClickListener {
+import java.util.Collections;
+
+import static com.example.todolist.MainActivity.arr;
+import  static com.example.todolist.DisplayTasks.taskAdapter;
+
+public class Settings extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     public static boolean hasPerms = false;
     TextView is_perm_tv;
     Button perm_check_btn;
+    Spinner sort_mode_sp;
     final int PERM_REQUEST_CODE = 1;
+
+    /*final int NAME_AZ = 1, NAME_ZA = 2, DATE_NEAREST = 3, DATE_LATEST = 4;*/
+    enum SortModes {NO_SELECTION, NAME_AZ, NAME_ZA, DATE_NEAREST, DATE_LATEST;
+
+        public static SortModes valueOf(int value) {
+            if (value == 1)
+                return SortModes.NAME_AZ;
+            else if (value == 2)
+                return SortModes.NAME_ZA;
+            else if (value == 3)
+                return SortModes.DATE_NEAREST;
+            else if (value == 4)
+                return SortModes.DATE_LATEST;
+            else
+                return SortModes.NO_SELECTION;
+
+
+        }
+    };
+    public static SortModes selection = SortModes.NO_SELECTION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +55,18 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
         is_perm_tv = findViewById(R.id.is_perms_tv);
         perm_check_btn = findViewById(R.id.perms_check_btn);
+        sort_mode_sp = findViewById(R.id.sort_mode_sp);
+
         is_perm_tv.setText(checkPermMessage());
         perm_check_btn.setOnClickListener(this);
+        sort_mode_sp.setOnItemSelectedListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         is_perm_tv.setText(checkPermMessage());
+        sort_mode_sp.setSelection(selection.ordinal());
     }
 
     public String checkPermMessage(){
@@ -69,5 +101,17 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                 }
                 return;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        selection = Settings.SortModes.valueOf(position);
+        if(selection != SortModes.NO_SELECTION)
+            ServiceHandler.sortList(this);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        Toast.makeText(this, "never", Toast.LENGTH_SHORT).show();
     }
 }

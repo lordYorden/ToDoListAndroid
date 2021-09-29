@@ -17,6 +17,11 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import com.example.todolist.Settings.SortModes;
+
+import static com.example.todolist.DisplayTasks.taskAdapter;
+import static com.example.todolist.MainActivity.arr;
 
 public class ServiceHandler {
 
@@ -89,6 +94,38 @@ public class ServiceHandler {
         } catch (ParseException e) {
             Log.e("Date format", "not a valid date"+e.toString());
         }
+    }
+
+    public static void sortList (Context context){
+        switch (Settings.selection){
+            case NAME_AZ:
+                Toast.makeText(context, "a-z", Toast.LENGTH_SHORT).show();
+                if(!arr.isEmpty()) {
+                    Collections.sort(arr, (a, b) -> a.task.compareTo(b.task));
+                }
+                break;
+            case NAME_ZA:
+                Toast.makeText(context, "z-a", Toast.LENGTH_SHORT).show();
+                if(!arr.isEmpty()) {
+                    Collections.sort(arr, (a, b) -> b.task.compareTo(a.task));
+                }
+                break;
+            case DATE_LATEST:
+                Toast.makeText(context, "date latest", Toast.LENGTH_SHORT).show();
+                if(!arr.isEmpty()) {
+                    Collections.sort(arr, (a, b) -> a.doDate.compareTo(b.doDate));
+                }
+                break;
+            case DATE_NEAREST:
+                Toast.makeText(context, "date nearest", Toast.LENGTH_SHORT).show();
+                if(!arr.isEmpty()) {
+                    Collections.sort(arr, (a, b) -> b.doDate.compareTo(a.doDate));
+                }
+                break;
+            default:
+                Toast.makeText(context, "How?", Toast.LENGTH_SHORT).show();
+        }
+        taskAdapter.notifyDataSetChanged();
     }
 
     public static Bitmap imageFromFile(String filePath) throws FileNotFoundException

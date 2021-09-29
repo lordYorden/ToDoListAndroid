@@ -24,7 +24,7 @@ import static com.example.todolist.MainActivity.arr;
 public class DisplayTasks extends AppCompatActivity {
 
     ListView tasks_lv;
-    TaskAdapter taskAdapter;
+    public static TaskAdapter taskAdapter;
     Boolean isResume;
     final int PERM_REQUEST_CODE = 1;
 
@@ -77,6 +77,7 @@ public class DisplayTasks extends AppCompatActivity {
         ArrayList<Task> temp = new ArrayList<Task>();
         ServiceHandler.readFromFileToArr("tasks.txt", this, temp);
         taskAdapter.addAll(temp);
+        ServiceHandler.sortList(this);
         isResume = false;
     }
 
@@ -98,7 +99,7 @@ public class DisplayTasks extends AppCompatActivity {
             /*Toast.makeText(this, "Yet To add a Settings menu", Toast.LENGTH_SHORT).show();*/
             Intent toSettings = new Intent(this, Settings.class);
             startActivity(toSettings);
-            isResume = true;
+            isResume = false;
         } else {
             return false;
         }
