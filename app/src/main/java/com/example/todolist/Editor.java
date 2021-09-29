@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -29,7 +30,6 @@ import java.util.Calendar;
 public class Editor extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     ImageButton display_selected;
-    Button image_picker_btn;
     Button add_btn;
     TextView display_info, date_selector_tv;
     Button resetTasks_btn;
@@ -41,9 +41,9 @@ public class Editor extends AppCompatActivity implements View.OnClickListener, D
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+        getSupportActionBar().hide();
 
         display_selected = findViewById(R.id.display_selected);
-        /*image_picker_btn = findViewById(R.id.image_pick_btn);*/
         /*display_info = findViewById(R.id.display_info);*/
         add_btn = findViewById(R.id.addToFile_btn);
         task_et = findViewById(R.id.task_et);
