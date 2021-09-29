@@ -4,9 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
+    android:padding="6dp"
     tools:context=".Editor">
+
+    <!--move to settings when ready-->
+
+    <Button
+        android:id="@+id/addToFile_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="Add"
+        tools:layout_editor_absoluteX="159dp"
+        tools:layout_editor_absoluteY="210dp" />
+
+    <EditText
+        android:id="@+id/task_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:ems="10"
+        android:hint="Title"
+        android:inputType="textPersonName"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="100dp"
+        tools:layout_editor_absoluteY="133dp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/date_selector_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select a date"
+        android:textSize="18sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/display_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="231dp"
+        android:background="@null"
+        android:maxWidth="200dp"
+        android:maxHeight="320dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/example"
+        tools:srcCompat="@drawable/example" />
+
+    <!--<Button
+        android:id="@+id/image_pick_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:text="Select an Image" />-->
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/resetTasks_btn"
@@ -14,80 +77,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:text="reset tasks" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50sp"
-        android:text="Create Task"
-        android:textColor="#FFFFFF"
-        android:textSize="36sp" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/task_et"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Task"
-            android:inputType="textPersonName"
-            android:textColor="#FFFFFF"
-            tools:layout_editor_absoluteX="100dp"
-            tools:layout_editor_absoluteY="133dp" />
-
-        <EditText
-            android:id="@+id/date_et"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="date"
-            android:inputType="date" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:gravity="right|left"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/display_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hi" />
-
-            <ImageView
-                android:id="@+id/display_selected"
-                android:layout_width="wrap_content"
-                android:layout_height="231dp"
-                android:maxWidth="200dp"
-                android:maxHeight="320dp"
-                android:scaleType="fitCenter"
-                tools:srcCompat="@drawable/example" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/image_pick_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10sp"
-            android:text="Select an Image" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/addToFile_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50sp"
-        android:text="Add"
-        tools:layout_editor_absoluteX="159dp"
-        tools:layout_editor_absoluteY="210dp" />
 
 </LinearLayout>
