@@ -99,7 +99,7 @@ public class DisplayTasks extends AppCompatActivity {
             /*Toast.makeText(this, "Yet To add a Settings menu", Toast.LENGTH_SHORT).show();*/
             Intent toSettings = new Intent(this, Settings.class);
             startActivity(toSettings);
-            isResume = false;
+            isResume = true;
         } else {
             return false;
         }

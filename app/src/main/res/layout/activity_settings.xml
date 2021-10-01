@@ -5,13 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
     tools:context=".Settings">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:divider="@color/black"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,7 +30,7 @@
             android:id="@+id/sort_mode_sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/sort_types"/>
+            android:entries="@array/sort_types" />
 
     </LinearLayout>
 
@@ -36,9 +39,11 @@
         android:layout_height="20dp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <Button
             android:id="@+id/perms_check_btn"
@@ -57,6 +62,26 @@
             android:layout_height="wrap_content"
             android:text="Don't have Permission"
             android:textSize="16dp" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <Button
+            android:id="@+id/reset_tasks_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="reset tasks" />
 
     </LinearLayout>
 

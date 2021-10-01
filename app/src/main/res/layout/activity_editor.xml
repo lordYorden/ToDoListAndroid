@@ -71,11 +71,11 @@
         android:layout_height="20dp"
         android:visibility="invisible" />
 
-    <Button
-        android:id="@+id/resetTasks_btn"
+    <!--<Button
+        android:id="@+id/reset_tasks_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="reset tasks" />
+        android:text="reset tasks" />-->
 
 </LinearLayout>
