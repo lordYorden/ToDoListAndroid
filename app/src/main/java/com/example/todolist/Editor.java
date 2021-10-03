@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -32,7 +31,7 @@ public class Editor extends AppCompatActivity implements View.OnClickListener, D
     ImageButton display_selected;
     Button add_btn;
     TextView display_info, date_selector_tv;
-    Button resetTasks_btn;
+   /* Button resetTasks_btn;*/
     String imagePath;
     EditText task_et;
 
@@ -48,11 +47,11 @@ public class Editor extends AppCompatActivity implements View.OnClickListener, D
         add_btn = findViewById(R.id.addToFile_btn);
         task_et = findViewById(R.id.task_et);
         date_selector_tv = findViewById(R.id.date_selector_tv);
-        resetTasks_btn = findViewById(R.id.resetTasks_btn);
+        /*resetTasks_btn = findViewById(R.id.reset_tasks_btn);*/
 
         add_btn.setOnClickListener(this);
         display_selected.setOnClickListener(this);
-        resetTasks_btn.setOnClickListener(this);
+        /*resetTasks_btn.setOnClickListener(this);*/
         date_selector_tv.setOnClickListener(this);
 
     }
@@ -110,7 +109,7 @@ public class Editor extends AppCompatActivity implements View.OnClickListener, D
             writeToFile(data, this);
             Toast.makeText(this, "Task was added!", Toast.LENGTH_SHORT).show();
         }
-        else if(v == resetTasks_btn)
+        /*else if(v == resetTasks_btn)
         {
             try {
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("tasks.txt", MODE_PRIVATE));
@@ -120,7 +119,7 @@ public class Editor extends AppCompatActivity implements View.OnClickListener, D
             catch (IOException e) {
                 Log.e("Exception", "File write failed: " + e.toString());
             }
-        }
+        }*/
         else if(v == date_selector_tv){
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
             datePickerDialog.show();

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,8 +24,9 @@ import static com.example.todolist.MainActivity.arr;
 public class DisplayTasks extends AppCompatActivity {
 
     ListView tasks_lv;
-    TaskAdapter taskAdapter;
+    public static TaskAdapter taskAdapter;
     Boolean isResume;
+    final int PERM_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,7 @@ public class DisplayTasks extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(ContextCompat.checkSelfPermission(DisplayTasks.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
-                ActivityCompat.requestPermissions(DisplayTasks.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(DisplayTasks.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERM_REQUEST_CODE);
             }
         }
 
@@ -44,6 +46,23 @@ public class DisplayTasks extends AppCompatActivity {
         taskAdapter = new TaskAdapter(this, 0, 0, arr);
         tasks_lv.setAdapter(taskAdapter);
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PERM_REQUEST_CODE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    Settings.hasPerms = true;
+                    Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
+                    // in your app.
+                }  else {
+                    Toast.makeText(this, "Permission failed go to settings to toggle again, or else the app wont work!", Toast.LENGTH_LONG).show();
+                    Settings.hasPerms = false;
+                }
+                return;
+        }
     }
 
     @Override
@@ -58,6 +77,7 @@ public class DisplayTasks extends AppCompatActivity {
         ArrayList<Task> temp = new ArrayList<Task>();
         ServiceHandler.readFromFileToArr("tasks.txt", this, temp);
         taskAdapter.addAll(temp);
+        ServiceHandler.sortList(this);
         isResume = false;
     }
 
@@ -76,7 +96,10 @@ public class DisplayTasks extends AppCompatActivity {
            startActivity(toEditor);
            isResume = true;
         } else if(itemId == R.id.settings){
-            Toast.makeText(this, "Yet To add a Settings menu", Toast.LENGTH_SHORT).show();
+            /*Toast.makeText(this, "Yet To add a Settings menu", Toast.LENGTH_SHORT).show();*/
+            Intent toSettings = new Intent(this, Settings.class);
+            startActivity(toSettings);
+            isResume = true;
         } else {
             return false;
         }
