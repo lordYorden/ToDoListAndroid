@@ -17,6 +17,9 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 import static com.example.todolist.MainActivity.arr;
@@ -46,6 +49,11 @@ public class DisplayTasks extends AppCompatActivity {
         taskAdapter = new TaskAdapter(this, 0, 0, arr);
         tasks_lv.setAdapter(taskAdapter);
 
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+
+        myRef.setValue("Hello, World!");
     }
 
     @Override
@@ -105,4 +113,5 @@ public class DisplayTasks extends AppCompatActivity {
         }
         return true;
     }
+
 }
