@@ -30,6 +30,9 @@ public class DisplayTasks extends AppCompatActivity {
     public static TaskAdapter taskAdapter;
     Boolean isResume;
     final int PERM_REQUEST_CODE = 1;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +52,12 @@ public class DisplayTasks extends AppCompatActivity {
         taskAdapter = new TaskAdapter(this, 0, 0, arr);
         tasks_lv.setAdapter(taskAdapter);
 
-        // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
+        Account account = new Account("yarden", "1234", arr);
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference().child("users");
+        myRef.push().setValue(account);
 
-        myRef.setValue("Hello, World!");
+
     }
 
     @Override
