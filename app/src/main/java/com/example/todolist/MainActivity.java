@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             displayNextNode();
         }
         else if (v == editor_switch_btn) {
-            Intent main_to_editor = new Intent(this, Editor.class);
+            Intent main_to_editor = new Intent(this, EditorActivity.class);
             startActivity(main_to_editor);
         }
     }

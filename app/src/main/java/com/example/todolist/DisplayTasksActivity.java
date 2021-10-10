@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 
 import static com.example.todolist.MainActivity.arr;
 
-public class DisplayTasks extends AppCompatActivity {
+public class DisplayTasksActivity extends AppCompatActivity {
 
     ListView tasks_lv;
     public static TaskAdapter taskAdapter;
@@ -40,8 +39,8 @@ public class DisplayTasks extends AppCompatActivity {
         setContentView(R.layout.activity_display_tasks);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(ContextCompat.checkSelfPermission(DisplayTasks.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
-                ActivityCompat.requestPermissions(DisplayTasks.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERM_REQUEST_CODE);
+            if(ContextCompat.checkSelfPermission(DisplayTasksActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                ActivityCompat.requestPermissions(DisplayTasksActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERM_REQUEST_CODE);
             }
         }
 
@@ -66,12 +65,12 @@ public class DisplayTasks extends AppCompatActivity {
             case PERM_REQUEST_CODE:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Settings.hasPerms = true;
+                    SettingsActivity.hasPerms = true;
                     Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
                     // in your app.
                 }  else {
                     Toast.makeText(this, "Permission failed go to settings to toggle again, or else the app wont work!", Toast.LENGTH_LONG).show();
-                    Settings.hasPerms = false;
+                    SettingsActivity.hasPerms = false;
                 }
                 return;
         }
@@ -104,12 +103,12 @@ public class DisplayTasks extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId =  item.getItemId();
         if(itemId == R.id.editor){
-           Intent toEditor = new Intent(this, Editor.class);
+           Intent toEditor = new Intent(this, EditorActivity.class);
            startActivity(toEditor);
            isResume = true;
         } else if(itemId == R.id.settings){
             /*Toast.makeText(this, "Yet To add a Settings menu", Toast.LENGTH_SHORT).show();*/
-            Intent toSettings = new Intent(this, Settings.class);
+            Intent toSettings = new Intent(this, SettingsActivity.class);
             startActivity(toSettings);
             isResume = true;
         } else {

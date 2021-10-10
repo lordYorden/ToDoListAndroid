@@ -26,7 +26,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.Calendar;
 
-public class Editor extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
+public class EditorActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     ImageButton display_selected;
     Button add_btn;

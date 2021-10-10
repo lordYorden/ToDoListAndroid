@@ -3,20 +3,20 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimaryDark">#232d36</item>
+<!--        <item name="colorPrimaryDark">#232d36</item>-->
         <item name="colorPrimary">#232d36</item>
         <item name="colorPrimaryVariant">#128C7E</item>
-<!--        <item name="colorOnPrimary">#232d36</item>-->
-        <item name="colorSecondary">#232d36</item>
+        <item name="colorOnPrimary">@color/White</item>
+<!--        <item name="colorSecondary">#232d36</item>-->
         <item name="android:colorBackground">#111e25</item>
         <item name="colorSurface">#121212</item>
-        <item name="colorOnSecondary">#232d36</item>
-        <item name="android:textColorPrimary">#86949f</item>
+<!--        <item name="colorOnSecondary">#232d36</item>-->
+        <item name="android:textColorPrimary">@color/White</item>
         <item name="colorOnBackground">@color/White</item>
 
         <item name="colorError">#CF6679</item>
         <item name="colorOnError">#000000</item>
-<!--        <item name="android:colorButtonNormal" tools:targetApi="lollipop">@color/White</item>-->
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorButtonNormal" tools:targetApi="lollipop">@color/LightGray</item>
+        <item name="colorAccent">@color/BlueColorAccent</item>
     </style>
 </resources>

@@ -18,9 +18,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import com.example.todolist.Settings.SortModes;
 
-import static com.example.todolist.DisplayTasks.taskAdapter;
+import static com.example.todolist.DisplayTasksActivity.taskAdapter;
 import static com.example.todolist.MainActivity.arr;
 
 public class ServiceHandler {
@@ -97,7 +96,7 @@ public class ServiceHandler {
     }
 
     public static void sortList (Context context){
-        switch (Settings.selection){
+        switch (SettingsActivity.selection){
             case NAME_AZ:
                 Toast.makeText(context, "a-z", Toast.LENGTH_SHORT).show();
                 if(!arr.isEmpty()) {

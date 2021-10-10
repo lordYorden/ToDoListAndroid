@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="DarkColorPrimary">#000000</color>
     <color name="DarkColorAccent">#D81B60</color>
+    <color name="BlueColorAccent">#038cfc</color>
     <color name="White">#ffffff</color>
     <color name="dark_grey">#222930</color>
     <color name="LightGray">#3a3a3a</color>
