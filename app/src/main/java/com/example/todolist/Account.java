@@ -17,6 +17,12 @@ public class Account {
         this.tasks = tasks;
     }
 
+    public Account(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.tasks = new ArrayList<Task>();
+    }
+
     public String getUsername() {
         return username;
     }
