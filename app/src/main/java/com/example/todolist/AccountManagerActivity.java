@@ -23,7 +23,7 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
     AlertDialog.Builder dialogBuilder;
     AlertDialog dialog;
     boolean isStart;
-    FirebaseHandler firebaseHandler;
+    public static FirebaseHandler firebaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

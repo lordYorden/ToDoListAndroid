@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,26 +15,28 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
 public class FirebaseHandler {
-    private FirebaseDatabase db;
-    private Account user;
+    private static final FirebaseDatabase db = FirebaseDatabase.getInstance();
+    public Account user;
     private Context context;
 
     public FirebaseHandler(Context context) {
         this.user = null;
-        this.db = FirebaseDatabase.getInstance();
         this.context = context;
     }
 
     public void Login(String username, String password) {
-        DatabaseReference users = this.db.getReference("users");
+        user = null;
+        DatabaseReference users = db.getReference("users");
         Query q = users.orderByValue();
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Account temp = null;
+                boolean doseUserExist = false;
                 for(DataSnapshot dst : snapshot.getChildren()){
                     try {
                         temp = dst.getValue(Account.class);
@@ -43,11 +46,17 @@ public class FirebaseHandler {
                     }
 
                     if(temp != null && temp.getUsername().equals(username) && temp.getPassword().equals(password)){
-                        Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show();
                         user = temp;
-                    }else {
-                        Toast.makeText(context, "Login Failed, Wrong username or password!", Toast.LENGTH_SHORT).show();
+                        doseUserExist = true;
+                        Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show();
+                        Intent toTasks = new Intent(context, DisplayTasksActivity.class);
+                        context.startActivity(toTasks);
+                        break;
                     }
+                }
+
+                if(!doseUserExist){
+                    Toast.makeText(context, "Login Failed, Wrong username or password!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -61,12 +70,14 @@ public class FirebaseHandler {
     }
 
     public void signup(String username, String password) {
-        DatabaseReference users = this.db.getReference("users");
+        user = null;
+        DatabaseReference users = db.getReference("users");
         Query q = users.orderByValue();
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot){
                 Account temp = null;
+                boolean doseUserExist = false;
                 for (DataSnapshot dst : snapshot.getChildren()) {
                     try {
                         temp = dst.getValue(Account.class);
@@ -75,11 +86,19 @@ public class FirebaseHandler {
                     }
 
                     if (temp != null && temp.getUsername().equals(username)) {
+                        doseUserExist = true;
                         Toast.makeText(context, "Signup Failed, User already exist!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, "Signup Successful", Toast.LENGTH_SHORT).show();
-                        user = new Account(username,password);
+                        break;
                     }
+                }
+
+                if(!doseUserExist){
+                    Toast.makeText(context, "Signup Successful", Toast.LENGTH_SHORT).show();
+                    user = new Account(username,password);
+                    user.setTasks(new ArrayList<Task>());
+                    users.child(username).setValue(user);
+                    Intent toTasks = new Intent(context, DisplayTasksActivity.class);
+                    context.startActivity(toTasks);
                 }
             }
 
@@ -88,5 +107,17 @@ public class FirebaseHandler {
 
             }
         });
+    }
+
+    public static FirebaseDatabase getDb() {
+        return db;
+    }
+
+    public Account getUser() {
+        return user;
+    }
+
+    public void setUser(Account user) {
+        this.user = user;
     }
 }

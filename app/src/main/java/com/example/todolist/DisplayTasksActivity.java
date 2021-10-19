@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 import static com.example.todolist.MainActivity.arr;
+import static com.example.todolist.AccountManagerActivity.firebaseHandler;
 
 public class DisplayTasksActivity extends AppCompatActivity {
 
@@ -47,15 +48,13 @@ public class DisplayTasksActivity extends AppCompatActivity {
         tasks_lv = findViewById(R.id.tasks_lv);
         isResume = false;
 
-        ServiceHandler.readFromFileToArr("tasks.txt", this, arr);
+        ArrayList<Task> tasks = firebaseHandler.user.getTasks();
+        if(tasks == null)
+            tasks = new ArrayList<Task>();
+        arr = tasks;
+/*         ServiceHandler.readFromFileToArr("tasks.txt", this, arr);*/
         taskAdapter = new TaskAdapter(this, 0, 0, arr);
         tasks_lv.setAdapter(taskAdapter);
-
-        Account account = new Account("yarden", "1234", arr);
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference().child("users");
-        myRef.push().setValue(account);
-
 
     }
 
