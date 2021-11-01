@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,11 +20,13 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     public static boolean hasPerms = false;
     TextView is_perm_tv;
-    Button perm_check_btn, reset_tasks_btn;
+    Button perm_check_btn, reset_tasks_btn, disconnect_btn;
     Spinner sort_mode_sp;
     final int PERM_REQUEST_CODE = 1;
 
@@ -56,12 +59,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         perm_check_btn = findViewById(R.id.perms_check_btn);
         sort_mode_sp = findViewById(R.id.sort_mode_sp);
         reset_tasks_btn = findViewById(R.id.reset_tasks_btn);
+        disconnect_btn = findViewById(R.id.disconnect_btn);
 
 
         is_perm_tv.setText(checkPermMessage());
         perm_check_btn.setOnClickListener(this);
         sort_mode_sp.setOnItemSelectedListener(this);
         reset_tasks_btn.setOnClickListener(this);
+        disconnect_btn.setOnClickListener(this);
     }
 
     @Override
@@ -90,6 +95,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(this, "reset", Toast.LENGTH_SHORT).show();
             ServiceHandler.resetLocalTasks(this);
             ServiceHandler.setTaskToFirebase(null);
+        }else if(v == disconnect_btn){
+            Intent toLogin = new Intent(this, AccountManagerActivity.class);
+            toLogin.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivityIfNeeded(toLogin, 0);
         }
     }
 

@@ -41,6 +41,18 @@
         android:layout_width="wrap_content"
         android:layout_height="10dp"/>
 
+    <CheckBox
+        android:id="@+id/login_cb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Keep me logged in"
+        android:textAllCaps="false" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
     <TextView
         android:id="@+id/to_signup_tv"
         android:layout_width="wrap_content"

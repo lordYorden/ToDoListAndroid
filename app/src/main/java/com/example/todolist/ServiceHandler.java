@@ -71,8 +71,8 @@ public class ServiceHandler {
         String data = "";
         for(Task task : tasks){
             data = task.task + "=" + task.pic + "=" + task.doDate.toString() + "\n";
-            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
-            writeToFile(data, context);
+            /*Toast.makeText(context, data, Toast.LENGTH_SHORT).show();*/
+            writeToFile(data, context, "tasks.txt");
         }
     }
 
@@ -94,9 +94,20 @@ public class ServiceHandler {
 
 
 
-    public static void writeToFile(String data, Context context) {
+    public static void writeToFile(String data, Context context, String filePath) {
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("tasks.txt", MODE_APPEND));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filePath, MODE_APPEND));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    public static void writeToFileNonAppend(String data, Context context, String filePath){
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filePath, MODE_PRIVATE));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
         }
@@ -147,6 +158,32 @@ public class ServiceHandler {
             Log.e("Date format", "not a valid date"+e.toString());
         }
     }
+
+    public static String readFromFile(String filePath, Context context) {
+        try {
+            InputStream inputStream = context.openFileInput(filePath);
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+
+                receiveString = bufferedReader.readLine();
+                if(receiveString != null)
+                    return receiveString.replaceAll("\n", "");
+                else
+                    return "";
+            } else
+                return "";
+        }
+        catch (FileNotFoundException e) {
+            Log.e("File search", "File not found: " + e.toString());
+            return "";
+        } catch (IOException e) {
+            Log.e("File read", "Can not read file: " + e.toString());
+            return "";
+        }
+    }
+
 
     public static void sortList (Context context){
         switch (SettingsActivity.selection){

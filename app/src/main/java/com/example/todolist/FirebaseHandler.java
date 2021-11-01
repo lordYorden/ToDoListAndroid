@@ -28,6 +28,10 @@ public class FirebaseHandler {
         this.context = context;
     }
 
+    public void disconnect(){
+        user = null;
+    }
+
     public void Login(String username, String password) {
         user = null;
         DatabaseReference users = db.getReference("users");

@@ -3,7 +3,6 @@ package com.example.todolist;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -21,9 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.util.Calendar;
 
@@ -107,7 +103,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
             }
 
             String data = task_et.getText() + "=" + imagePath + "=" + date_selector_tv.getText() + "\n";
-            ServiceHandler.writeToFile(data, this);
+            ServiceHandler.writeToFile(data, this, "tasks.txt");
             try {
                 ServiceHandler.addTaskToFirebase(new Task(task_et.getText().toString(), imagePath, ServiceHandler.format.parse(date_selector_tv.getText().toString())));
             } catch (ParseException e) {
