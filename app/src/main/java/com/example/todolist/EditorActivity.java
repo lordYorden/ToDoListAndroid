@@ -3,7 +3,6 @@ package com.example.todolist;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -21,12 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
+import java.text.ParseException;
 import java.util.Calendar;
 
-public class Editor extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
+public class EditorActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     ImageButton display_selected;
     Button add_btn;
@@ -106,7 +103,13 @@ public class Editor extends AppCompatActivity implements View.OnClickListener, D
             }
 
             String data = task_et.getText() + "=" + imagePath + "=" + date_selector_tv.getText() + "\n";
-            writeToFile(data, this);
+            ServiceHandler.writeToFile(data, this, "tasks.txt");
+            try {
+                ServiceHandler.addTaskToFirebase(new Task(task_et.getText().toString(), imagePath, ServiceHandler.format.parse(date_selector_tv.getText().toString())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "task failed", Toast.LENGTH_SHORT).show();
+            }
             Toast.makeText(this, "Task was added!", Toast.LENGTH_SHORT).show();
         }
         /*else if(v == resetTasks_btn)
@@ -123,17 +126,6 @@ public class Editor extends AppCompatActivity implements View.OnClickListener, D
         else if(v == date_selector_tv){
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
             datePickerDialog.show();
-        }
-    }
-
-    private void writeToFile(String data, Context context) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("tasks.txt", MODE_APPEND));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
         }
     }
 

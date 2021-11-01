@@ -14,14 +14,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import com.example.todolist.Settings.SortModes;
 
-import static com.example.todolist.DisplayTasks.taskAdapter;
+import static android.content.Context.MODE_APPEND;
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.todolist.DisplayTasksActivity.taskAdapter;
 import static com.example.todolist.MainActivity.arr;
+import static com.example.todolist.AccountManagerActivity.firebaseHandler;
 
 public class ServiceHandler {
 
@@ -64,6 +67,66 @@ public class ServiceHandler {
         return rotate;
     }
 
+    public static void addTasksFromArray(ArrayList<Task> tasks, Context context){
+        String data = "";
+        for(Task task : tasks){
+            data = task.task + "=" + task.pic + "=" + task.doDate.toString() + "\n";
+            /*Toast.makeText(context, data, Toast.LENGTH_SHORT).show();*/
+            writeToFile(data, context, "tasks.txt");
+        }
+    }
+
+    public static void addTaskToFirebase(Task task){
+        Account user = firebaseHandler.user;
+        ArrayList<Task> tasks = user.getTasks();
+        if(tasks == null)
+            tasks = new ArrayList<Task>();
+        tasks.add(task);
+        user.setTasks(tasks);
+        FirebaseHandler.db.getReference(String.format("users/%s/tasks", user.getUsername())).setValue(user.getTasks());
+    }
+
+    public static void setTaskToFirebase(ArrayList<Task> tasks){
+        Account user = firebaseHandler.user;
+        user.setTasks(tasks);
+        FirebaseHandler.db.getReference(String.format("users/%s/tasks", user.getUsername())).setValue(user.getTasks());
+    }
+
+
+
+    public static void writeToFile(String data, Context context, String filePath) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filePath, MODE_APPEND));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    public static void writeToFileNonAppend(String data, Context context, String filePath){
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(filePath, MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    public static void resetLocalTasks(Context context){
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("tasks.txt", MODE_PRIVATE));
+            outputStreamWriter.write("");
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
     public static void readFromFileToArr(String filePath, Context context, ArrayList<Task> arr) {
 
         arr.clear();
@@ -96,8 +159,34 @@ public class ServiceHandler {
         }
     }
 
+    public static String readFromFile(String filePath, Context context) {
+        try {
+            InputStream inputStream = context.openFileInput(filePath);
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+
+                receiveString = bufferedReader.readLine();
+                if(receiveString != null)
+                    return receiveString.replaceAll("\n", "");
+                else
+                    return "";
+            } else
+                return "";
+        }
+        catch (FileNotFoundException e) {
+            Log.e("File search", "File not found: " + e.toString());
+            return "";
+        } catch (IOException e) {
+            Log.e("File read", "Can not read file: " + e.toString());
+            return "";
+        }
+    }
+
+
     public static void sortList (Context context){
-        switch (Settings.selection){
+        switch (SettingsActivity.selection){
             case NAME_AZ:
                 Toast.makeText(context, "a-z", Toast.LENGTH_SHORT).show();
                 if(!arr.isEmpty()) {

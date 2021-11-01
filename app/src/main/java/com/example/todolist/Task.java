@@ -7,6 +7,10 @@ public class Task {
     String pic;
     Date doDate;
 
+    Task(){
+
+    }
+
     Task(String Task, String pic, Date doDate)
     {
         this.pic = pic;

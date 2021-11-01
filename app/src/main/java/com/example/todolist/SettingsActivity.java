@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,11 +20,13 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-public class Settings extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     public static boolean hasPerms = false;
     TextView is_perm_tv;
-    Button perm_check_btn, reset_tasks_btn;
+    Button perm_check_btn, reset_tasks_btn, disconnect_btn;
     Spinner sort_mode_sp;
     final int PERM_REQUEST_CODE = 1;
 
@@ -56,12 +59,14 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
         perm_check_btn = findViewById(R.id.perms_check_btn);
         sort_mode_sp = findViewById(R.id.sort_mode_sp);
         reset_tasks_btn = findViewById(R.id.reset_tasks_btn);
+        disconnect_btn = findViewById(R.id.disconnect_btn);
 
 
         is_perm_tv.setText(checkPermMessage());
         perm_check_btn.setOnClickListener(this);
         sort_mode_sp.setOnItemSelectedListener(this);
         reset_tasks_btn.setOnClickListener(this);
+        disconnect_btn.setOnClickListener(this);
     }
 
     @Override
@@ -82,20 +87,18 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
     public void onClick(View v) {
         if (v == perm_check_btn) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(Settings.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-                    ActivityCompat.requestPermissions(Settings.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERM_REQUEST_CODE);
+                if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(SettingsActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERM_REQUEST_CODE);
                 }
             }
         }else if(v == reset_tasks_btn){
             Toast.makeText(this, "reset", Toast.LENGTH_SHORT).show();
-            try {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("tasks.txt", MODE_PRIVATE));
-                outputStreamWriter.write("");
-                outputStreamWriter.close();
-            }
-            catch (IOException e) {
-                Log.e("Exception", "File write failed: " + e.toString());
-            }
+            ServiceHandler.resetLocalTasks(this);
+            ServiceHandler.setTaskToFirebase(null);
+        }else if(v == disconnect_btn){
+            Intent toLogin = new Intent(this, AccountManagerActivity.class);
+            toLogin.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivityIfNeeded(toLogin, 0);
         }
     }
 
@@ -105,12 +108,12 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
             case PERM_REQUEST_CODE:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Settings.hasPerms = true;
+                    SettingsActivity.hasPerms = true;
                     Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
                     // in your app.
                 }  else {
                     Toast.makeText(this, "Permission failed, the app wont work!", Toast.LENGTH_LONG).show();
-                    Settings.hasPerms = false;
+                    SettingsActivity.hasPerms = false;
                 }
                 return;
         }
@@ -118,7 +121,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        selection = Settings.SortModes.valueOf(position);
+        selection = SettingsActivity.SortModes.valueOf(position);
         if(selection != SortModes.NO_SELECTION)
             ServiceHandler.sortList(this);
     }

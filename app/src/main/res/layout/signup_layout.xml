@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="60dp">
+
+    <EditText
+        android:id="@+id/signup_username_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="username"
+        android:inputType="textPersonName" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"/>
+
+    <EditText
+        android:id="@+id/signup_password_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"/>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"/>
+
+    <Button
+        android:id="@+id/signup_b"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Signup"
+        android:textAllCaps="false" />
+    
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"/>
+
+    <TextView
+        android:id="@+id/to_login_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registered? Click here to login"
+        android:textAllCaps="false"/>
+
+</LinearLayout>
