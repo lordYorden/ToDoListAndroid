@@ -52,10 +52,19 @@ public class DisplayTasksActivity extends AppCompatActivity {
         if(tasks == null)
             tasks = new ArrayList<Task>();
         arr = tasks;
+
+        ServiceHandler.resetLocalTasks(this);
+        ServiceHandler.addTasksFromArray(arr, this);
 /*         ServiceHandler.readFromFileToArr("tasks.txt", this, arr);*/
         taskAdapter = new TaskAdapter(this, 0, 0, arr);
         tasks_lv.setAdapter(taskAdapter);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ServiceHandler.setTaskToFirebase(arr);
     }
 
     @Override

@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.text.ParseException;
 import java.util.Calendar;
 
 public class EditorActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
@@ -106,7 +107,13 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
             }
 
             String data = task_et.getText() + "=" + imagePath + "=" + date_selector_tv.getText() + "\n";
-            writeToFile(data, this);
+            ServiceHandler.writeToFile(data, this);
+            try {
+                ServiceHandler.addTaskToFirebase(new Task(task_et.getText().toString(), imagePath, ServiceHandler.format.parse(date_selector_tv.getText().toString())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "task failed", Toast.LENGTH_SHORT).show();
+            }
             Toast.makeText(this, "Task was added!", Toast.LENGTH_SHORT).show();
         }
         /*else if(v == resetTasks_btn)
@@ -123,17 +130,6 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
         else if(v == date_selector_tv){
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
             datePickerDialog.show();
-        }
-    }
-
-    private void writeToFile(String data, Context context) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("tasks.txt", MODE_APPEND));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
         }
     }
 

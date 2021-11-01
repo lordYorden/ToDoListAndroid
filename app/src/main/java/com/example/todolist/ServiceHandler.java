@@ -14,13 +14,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static android.content.Context.MODE_APPEND;
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.todolist.DisplayTasksActivity.taskAdapter;
 import static com.example.todolist.MainActivity.arr;
+import static com.example.todolist.AccountManagerActivity.firebaseHandler;
 
 public class ServiceHandler {
 
@@ -61,6 +65,55 @@ public class ServiceHandler {
             e.printStackTrace();
         }
         return rotate;
+    }
+
+    public static void addTasksFromArray(ArrayList<Task> tasks, Context context){
+        String data = "";
+        for(Task task : tasks){
+            data = task.task + "=" + task.pic + "=" + task.doDate.toString() + "\n";
+            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
+            writeToFile(data, context);
+        }
+    }
+
+    public static void addTaskToFirebase(Task task){
+        Account user = firebaseHandler.user;
+        ArrayList<Task> tasks = user.getTasks();
+        if(tasks == null)
+            tasks = new ArrayList<Task>();
+        tasks.add(task);
+        user.setTasks(tasks);
+        FirebaseHandler.db.getReference(String.format("users/%s/tasks", user.getUsername())).setValue(user.getTasks());
+    }
+
+    public static void setTaskToFirebase(ArrayList<Task> tasks){
+        Account user = firebaseHandler.user;
+        user.setTasks(tasks);
+        FirebaseHandler.db.getReference(String.format("users/%s/tasks", user.getUsername())).setValue(user.getTasks());
+    }
+
+
+
+    public static void writeToFile(String data, Context context) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("tasks.txt", MODE_APPEND));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    public static void resetLocalTasks(Context context){
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("tasks.txt", MODE_PRIVATE));
+            outputStreamWriter.write("");
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
     }
 
     public static void readFromFileToArr(String filePath, Context context, ArrayList<Task> arr) {

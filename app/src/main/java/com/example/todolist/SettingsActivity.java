@@ -88,14 +88,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
         }else if(v == reset_tasks_btn){
             Toast.makeText(this, "reset", Toast.LENGTH_SHORT).show();
-            try {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("tasks.txt", MODE_PRIVATE));
-                outputStreamWriter.write("");
-                outputStreamWriter.close();
-            }
-            catch (IOException e) {
-                Log.e("Exception", "File write failed: " + e.toString());
-            }
+            ServiceHandler.resetLocalTasks(this);
+            ServiceHandler.setTaskToFirebase(null);
         }
     }
 

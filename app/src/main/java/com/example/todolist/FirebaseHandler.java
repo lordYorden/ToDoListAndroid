@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
 public class FirebaseHandler {
-    private static final FirebaseDatabase db = FirebaseDatabase.getInstance();
+    public static final FirebaseDatabase db = FirebaseDatabase.getInstance();
     public Account user;
     private Context context;
 
