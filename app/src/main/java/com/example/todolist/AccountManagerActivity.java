@@ -4,6 +4,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,11 +30,14 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
     boolean isStart;
     boolean stayLoggedIn;
     public static FirebaseHandler firebaseHandler;
+    InternetConnectionReceiver internetConnectionReceiver = new InternetConnectionReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_manager);
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(internetConnectionReceiver, intentFilter);
 
         //activity components
         to_tasks_b = findViewById(R.id.to_tasks_b);
@@ -145,6 +150,7 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(internetConnectionReceiver);
         if(stayLoggedIn) {
             ServiceHandler.writeToFileNonAppend(String.format("%s=%s", firebaseHandler.user.getUsername(), firebaseHandler.getUser().getPassword()), this, "login.txt");
             Toast.makeText(this, "write login", Toast.LENGTH_SHORT).show();
