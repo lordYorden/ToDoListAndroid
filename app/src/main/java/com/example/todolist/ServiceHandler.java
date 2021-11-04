@@ -70,7 +70,7 @@ public class ServiceHandler {
     public static void addTasksFromArray(ArrayList<Task> tasks, Context context){
         String data = "";
         for(Task task : tasks){
-            data = task.task + "=" + task.pic + "=" + task.doDate.toString() + "\n";
+            data = task.task + "=" + task.pic + "=" + format.format(task.doDate) + "\n";
             /*Toast.makeText(context, data, Toast.LENGTH_SHORT).show();*/
             writeToFile(data, context, "tasks.txt");
         }
