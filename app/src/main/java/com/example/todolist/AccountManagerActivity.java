@@ -148,14 +148,23 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        SaveLoginDetails();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(internetConnectionReceiver);
-        if(stayLoggedIn) {
+        Toast.makeText(this, "destroy", Toast.LENGTH_SHORT).show();
+    }
+
+    public void SaveLoginDetails(){
+        if(stayLoggedIn && firebaseHandler.user != null) {
             ServiceHandler.writeToFileNonAppend(String.format("%s=%s", firebaseHandler.user.getUsername(), firebaseHandler.getUser().getPassword()), this, "login.txt");
             Toast.makeText(this, "write login", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(this, "destroy", Toast.LENGTH_SHORT).show();
     }
 
     @Override
