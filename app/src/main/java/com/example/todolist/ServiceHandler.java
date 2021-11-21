@@ -8,7 +8,10 @@ import android.media.ExifInterface;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,9 +33,20 @@ public class ServiceHandler {
 
     public static SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
-    public static Bitmap fixPictureRotation(Task curr) throws FileNotFoundException
+    public static Bitmap fixPictureRotation(Task curr, Context context)
     {
-        Bitmap picToRotate = ServiceHandler.imageFromFile(curr.pic);
+        Bitmap picToRotate = null;
+        try {
+            picToRotate = ServiceHandler.imageFromFile(curr.pic);
+        }
+        catch (FileNotFoundException e)
+        {
+            Toast.makeText(context, "Image dose not exist anymore...Sorry :(", Toast.LENGTH_SHORT).show();
+        }
+/*        catch(IOException e) {
+          Log.e("Download image", e.getMessage()) ;
+        }*/
+
         Matrix matrix = new Matrix();
         int rotation = ServiceHandler.getCameraPhotoOrientation(curr.pic);
         if(rotation == 270)
@@ -70,7 +84,7 @@ public class ServiceHandler {
     public static void addTasksFromArray(ArrayList<Task> tasks, Context context){
         String data = "";
         for(Task task : tasks){
-            data = task.task + "=" + task.pic + "=" + format.format(task.doDate) + "\n";
+            data = task.task + "$" + task.pic + "$" + format.format(task.doDate) + "\n";
             /*Toast.makeText(context, data, Toast.LENGTH_SHORT).show();*/
             writeToFile(data, context, "tasks.txt");
         }
@@ -142,7 +156,7 @@ public class ServiceHandler {
                  do{
                     receiveString = bufferedReader.readLine();
                     if(receiveString != null && !receiveString.equals("")) {
-                        String[] strList = receiveString.split("=");
+                        String[] strList = receiveString.split("\\$");
                         /*Toast.makeText(context, "added node", Toast.LENGTH_SHORT).show();*/
                         arr.add(new Task(strList[0], strList[1], format.parse(strList[2])));
                     }
@@ -210,6 +224,8 @@ public class ServiceHandler {
                 if(!arr.isEmpty()) {
                     Collections.sort(arr, (a, b) -> b.doDate.compareTo(a.doDate));
                 }
+                break;
+            case NO_SELECTION:
                 break;
             default:
                 Toast.makeText(context, "How?", Toast.LENGTH_SHORT).show();
