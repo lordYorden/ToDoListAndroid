@@ -70,7 +70,7 @@ public class ServiceHandler {
     public static void addTasksFromArray(ArrayList<Task> tasks, Context context){
         String data = "";
         for(Task task : tasks){
-            data = task.task + "=" + task.pic + "=" + format.format(task.doDate) + "\n";
+            data = task.task + "$" + task.pic + "$" + format.format(task.doDate) + "\n";
             /*Toast.makeText(context, data, Toast.LENGTH_SHORT).show();*/
             writeToFile(data, context, "tasks.txt");
         }
@@ -142,7 +142,7 @@ public class ServiceHandler {
                  do{
                     receiveString = bufferedReader.readLine();
                     if(receiveString != null && !receiveString.equals("")) {
-                        String[] strList = receiveString.split("=");
+                        String[] strList = receiveString.split("\\$");
                         /*Toast.makeText(context, "added node", Toast.LENGTH_SHORT).show();*/
                         arr.add(new Task(strList[0], strList[1], format.parse(strList[2])));
                     }
@@ -210,6 +210,8 @@ public class ServiceHandler {
                 if(!arr.isEmpty()) {
                     Collections.sort(arr, (a, b) -> b.doDate.compareTo(a.doDate));
                 }
+                break;
+            case NO_SELECTION:
                 break;
             default:
                 Toast.makeText(context, "How?", Toast.LENGTH_SHORT).show();

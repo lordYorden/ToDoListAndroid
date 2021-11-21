@@ -31,6 +31,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
    /* Button resetTasks_btn;*/
     String imagePath;
     EditText task_et;
+    Uri image;
 
 
     @Override
@@ -60,6 +61,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
         if (resultCode == RESULT_OK) {
             try {
                 Uri imageUri = data.getData();
+                image = imageUri;
                 /*display_info.setText(getRealPathFromURI(imageUri));*/
                 imagePath = getRealPathFromURI(imageUri);
                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
@@ -97,20 +99,22 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
         }
         else if (v == add_btn)
         {
-            if(date_selector_tv.getText() == ""){
-                Toast.makeText(this, "Select date first!", Toast.LENGTH_SHORT).show();
+            if(date_selector_tv.getText().equals("") || task_et.getText().toString().equals("")){
+                Toast.makeText(this, "Select Date and name the task first!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            String data = task_et.getText() + "=" + imagePath + "=" + date_selector_tv.getText() + "\n";
-            ServiceHandler.writeToFile(data, this, "tasks.txt");
-            try {
+            /*String data = task_et.getText() + "=" + imagePath + "=" + date_selector_tv.getText() + "\n";
+            ServiceHandler.writeToFile(data, this, "tasks.txt");*/
+            FirebaseHandler.uploadImage(task_et.getText().toString(), AccountManagerActivity.firebaseHandler.user.getUsername(), date_selector_tv.getText().toString(), image,  this);
+
+            /*try {
                 ServiceHandler.addTaskToFirebase(new Task(task_et.getText().toString(), imagePath, ServiceHandler.format.parse(date_selector_tv.getText().toString())));
             } catch (ParseException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "task failed", Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(this, "Task was added!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Task was added!", Toast.LENGTH_SHORT).show();*/
         }
         /*else if(v == resetTasks_btn)
         {
