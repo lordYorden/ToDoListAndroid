@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -48,15 +50,12 @@ public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.On
 
         Task temp = objects.get(bitmap);
 
-        try
-        {
-            pic.setImageBitmap(ServiceHandler.fixPictureRotation(temp));
-            /*Toast.makeText(context, String.valueOf(rotation), Toast.LENGTH_SHORT).show();*/
-        }
-        catch (FileNotFoundException e)
-        {
-            Toast.makeText(context, "Image dose not exist anymore...Sorry :(", Toast.LENGTH_SHORT).show();
-        }
+
+        if(temp.pic.contains("https://"))
+            Picasso.get().load(temp.pic).into(pic);
+        else
+            pic.setImageBitmap(ServiceHandler.fixPictureRotation(temp, context));
+        /*Toast.makeText(context, String.valueOf(rotation), Toast.LENGTH_SHORT).show();*/
 
         date_tv.setText(ServiceHandler.format.format(temp.doDate));
         task_tv.setText(temp.task);

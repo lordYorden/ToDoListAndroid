@@ -8,7 +8,10 @@ import android.media.ExifInterface;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,9 +33,20 @@ public class ServiceHandler {
 
     public static SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
-    public static Bitmap fixPictureRotation(Task curr) throws FileNotFoundException
+    public static Bitmap fixPictureRotation(Task curr, Context context)
     {
-        Bitmap picToRotate = ServiceHandler.imageFromFile(curr.pic);
+        Bitmap picToRotate = null;
+        try {
+            picToRotate = ServiceHandler.imageFromFile(curr.pic);
+        }
+        catch (FileNotFoundException e)
+        {
+            Toast.makeText(context, "Image dose not exist anymore...Sorry :(", Toast.LENGTH_SHORT).show();
+        }
+/*        catch(IOException e) {
+          Log.e("Download image", e.getMessage()) ;
+        }*/
+
         Matrix matrix = new Matrix();
         int rotation = ServiceHandler.getCameraPhotoOrientation(curr.pic);
         if(rotation == 270)
