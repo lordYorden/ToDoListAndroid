@@ -79,12 +79,12 @@ public class DisplayTasksActivity extends AppCompatActivity {
                                 Toast.makeText(DisplayTasksActivity.this, String.format("task %s was deleted", curr.task), Toast.LENGTH_SHORT).show();
 
                                 firebaseHandler.user.removeTask(position);
-                                taskAdapter.clear();
-                                arr.clear();
-                                ArrayList<Task> tasks = firebaseHandler.user.getTasks();
+                                //taskAdapter.clear();
+                                //arr.clear();
+                                /*ArrayList<Task> tasks = firebaseHandler.user.getTasks();
                                 if(tasks == null)
                                     tasks = new ArrayList<Task>();
-                                taskAdapter.addAll(tasks);
+                                taskAdapter.addAll(tasks);*/
                                 ServiceHandler.resetLocalTasks(DisplayTasksActivity.this);
                                 ServiceHandler.addTasksFromArray(arr, DisplayTasksActivity.this);
                                 ServiceHandler.setTaskToFirebase(arr);
