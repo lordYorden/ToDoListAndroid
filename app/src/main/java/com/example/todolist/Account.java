@@ -39,6 +39,10 @@ public class Account {
         this.password = password;
     }
 
+    public void removeTask(int pos){
+        tasks.remove(pos);
+    }
+
     public ArrayList<Task> getTasks() {
         return tasks;
     }
