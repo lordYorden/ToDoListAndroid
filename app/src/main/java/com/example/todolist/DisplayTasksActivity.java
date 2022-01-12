@@ -1,11 +1,13 @@
 package com.example.todolist;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -13,6 +15,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,6 +50,8 @@ public class DisplayTasksActivity extends AppCompatActivity {
         }
 
         tasks_lv = findViewById(R.id.tasks_lv);
+/*      tasks_lv.setClickable(true);
+        tasks_lv.setItemsCanFocus(true);*/
         isResume = false;
 
         ArrayList<Task> tasks = firebaseHandler.user.getTasks();
@@ -56,12 +62,45 @@ public class DisplayTasksActivity extends AppCompatActivity {
         ServiceHandler.resetLocalTasks(this);
         ServiceHandler.addTasksFromArray(arr, this);
 /*         ServiceHandler.readFromFileToArr("tasks.txt", this, arr);*/
+
         taskAdapter = new TaskAdapter(this, 0, 0, arr);
         tasks_lv.setAdapter(taskAdapter);
+        tasks_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(DisplayTasksActivity.this, "position "+position, Toast.LENGTH_SHORT).show();
+                Task curr = arr.get(position);
+                Toast.makeText(DisplayTasksActivity.this, String.format("Name: %s, date: %s", curr.task, ServiceHandler.format.format(curr.doDate)), Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(DisplayTasksActivity.this)
+                        .setTitle("Delete Task")
+                        .setMessage("Are you sure you want to delete this task?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(DisplayTasksActivity.this, String.format("task %s was deleted", curr.task), Toast.LENGTH_SHORT).show();
+
+                                firebaseHandler.user.removeTask(position);
+                                taskAdapter.clear();
+                                arr.clear();
+                                ArrayList<Task> tasks = firebaseHandler.user.getTasks();
+                                if(tasks == null)
+                                    tasks = new ArrayList<Task>();
+                                taskAdapter.addAll(tasks);
+                                ServiceHandler.resetLocalTasks(DisplayTasksActivity.this);
+                                ServiceHandler.addTasksFromArray(arr, DisplayTasksActivity.this);
+                                ServiceHandler.setTaskToFirebase(arr);
+                                ServiceHandler.sortList(DisplayTasksActivity.this);
+                            }
+                        })
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setNegativeButton(android.R.string.no, null)
+                        //.setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
 
     }
 
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         ServiceHandler.setTaskToFirebase(arr);
@@ -75,7 +114,6 @@ public class DisplayTasksActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     SettingsActivity.hasPerms = true;
                     Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
-                    // in your app.
                 }  else {
                     Toast.makeText(this, "Permission failed go to settings to toggle again, or else the app wont work!", Toast.LENGTH_LONG).show();
                     SettingsActivity.hasPerms = false;
