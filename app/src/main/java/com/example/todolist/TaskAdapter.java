@@ -21,6 +21,8 @@ import com.squareup.picasso.Picasso;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import static com.example.todolist.MainActivity.arr;
+
 
 public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.OnCheckedChangeListener {
     Context context;
@@ -50,8 +52,8 @@ public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.On
 
         Task temp = objects.get(bitmap);
 
-
         if(temp.pic.contains("https://"))
+
             Picasso.get().load(temp.pic).into(pic);
         else
             pic.setImageBitmap(ServiceHandler.fixPictureRotation(temp, context));
@@ -59,25 +61,56 @@ public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.On
 
         date_tv.setText(ServiceHandler.format.format(temp.doDate));
         task_tv.setText(temp.task);
-        fin_cb.setOnCheckedChangeListener(this);
+        if(temp.isFin){
+            fin_cb.setChecked(true);
+            task_tv.setPaintFlags(task_tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+
+        fin_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    Toast.makeText(context, "task fin!", Toast.LENGTH_SHORT).show();
+                    //finish & marks task
+                    fin_cb.setChecked(true);
+                    task_tv.setPaintFlags(task_tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    temp.isFin = true;
+                    ServiceHandler.resetLocalTasks(context);
+                    ServiceHandler.addTasksFromArray(arr, context);
+                    ServiceHandler.setTaskToFirebase(arr);
+
+                } else{
+                    task_tv.setPaintFlags(0);
+                    temp.isFin = false;
+                    Toast.makeText(context, "undo", Toast.LENGTH_SHORT).show();
+                    ServiceHandler.resetLocalTasks(context);
+                    ServiceHandler.addTasksFromArray(arr, context);
+                    ServiceHandler.setTaskToFirebase(arr);
+
+                }
+            }
+        });
 
         return view;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        //gets the curr view and components
+        View view = (View) buttonView.getParent().getParent();
+        CheckBox fin_cb = view.findViewById(R.id.fin_cb);
+        TextView task_tv = view.findViewById(R.id.task_tv);
+
         if(isChecked) {
-            //gets the curr view and components
-            View view = (View) buttonView.getParent().getParent();
-            CheckBox fin_cb = view.findViewById(R.id.fin_cb);
-            TextView task_tv = view.findViewById(R.id.task_tv);
-            //*debug* notify user
             Toast.makeText(context, "task fin!", Toast.LENGTH_SHORT).show();
             //finish & marks task
-            fin_cb.setChecked(false);
-            fin_cb.setClickable(false);
+            fin_cb.setChecked(true);
             task_tv.setPaintFlags(task_tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        }
 
+        } else{
+            task_tv.setPaintFlags(0);
+            Toast.makeText(context, "undo", Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

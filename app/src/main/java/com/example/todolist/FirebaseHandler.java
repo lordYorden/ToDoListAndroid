@@ -141,7 +141,7 @@ public class FirebaseHandler {
                             Log.e("photoUrl", url);
                             pd.dismiss();
 
-                            String data = fileName + "$" + url + "$" + date + "\n";
+                            String data = fileName + "$" + url + "$" + date +  "$" + false + "\n";
                             ServiceHandler.writeToFile(data, context, "tasks.txt");
                             try {
                                 ServiceHandler.addTaskToFirebase(new Task(fileName, url, ServiceHandler.format.parse(date)));

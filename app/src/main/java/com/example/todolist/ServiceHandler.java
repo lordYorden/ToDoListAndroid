@@ -100,7 +100,7 @@ public class ServiceHandler {
     public static void addTasksFromArray(ArrayList<Task> tasks, Context context){
         String data = "";
         for(Task task : tasks){
-            data = task.task + "$" + task.pic + "$" + format.format(task.doDate) + "\n";
+            data = task.task + "$" + task.pic + "$" + format.format(task.doDate) + "$" + task.isFin + "\n";
             /*Toast.makeText(context, data, Toast.LENGTH_SHORT).show();*/
             writeToFile(data, context, "tasks.txt");
         }
@@ -174,7 +174,7 @@ public class ServiceHandler {
                     if(receiveString != null && !receiveString.equals("")) {
                         String[] strList = receiveString.split("\\$");
                         /*Toast.makeText(context, "added node", Toast.LENGTH_SHORT).show();*/
-                        arr.add(new Task(strList[0], strList[1], format.parse(strList[2])));
+                        arr.add(new Task(strList[0], strList[1], format.parse(strList[2]), Boolean.parseBoolean(strList[3])));
                     }
                 } while (receiveString != null );
                 inputStream.close();

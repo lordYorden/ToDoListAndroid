@@ -6,6 +6,7 @@ public class Task {
     String task;
     String pic;
     Date doDate;
+    Boolean isFin;
 
     Task(){
 
@@ -16,6 +17,15 @@ public class Task {
         this.pic = pic;
         this.task = Task;
         this.doDate = doDate;
+        this.isFin = false;
+    }
+
+    Task(String Task, String pic, Date doDate, Boolean isFin)
+    {
+        this.pic = pic;
+        this.task = Task;
+        this.doDate = doDate;
+        this.isFin = isFin;
     }
 
     public String getPic() {
@@ -40,5 +50,13 @@ public class Task {
 
     public void setTask(String task) {
         this.task = task;
+    }
+
+    public Boolean getFin() {
+        return isFin;
+    }
+
+    public void setFin(Boolean fin) {
+        isFin = fin;
     }
 }
