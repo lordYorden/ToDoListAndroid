@@ -54,6 +54,22 @@ public class ServiceHandler {
         return Bitmap.createBitmap(picToRotate, 0, 0, picToRotate.getWidth(), picToRotate.getHeight(), matrix, true);
     }
 
+    public static Bitmap fixPictureRotation(String imagePath, Context context) throws FileNotFoundException {
+        Bitmap picToRotate = null;
+        picToRotate = ServiceHandler.imageFromFile(imagePath);
+/*        catch(IOException e) {
+          Log.e("Download image", e.getMessage()) ;
+        }*/
+
+        Matrix matrix = new Matrix();
+        int rotation = ServiceHandler.getCameraPhotoOrientation(imagePath);
+        if(rotation == 270)
+            matrix.postRotate(-90);
+        else if(rotation == 90)
+            matrix.postRotate(90);
+        return Bitmap.createBitmap(picToRotate, 0, 0, picToRotate.getWidth(), picToRotate.getHeight(), matrix, true);
+    }
+
     public static int getCameraPhotoOrientation(String imagePath)
     {
         int rotate = 0;
@@ -253,5 +269,6 @@ public class ServiceHandler {
             throw new FileNotFoundException("Could not find " + filePath);
         }
     }
+
 
 }

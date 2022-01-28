@@ -96,6 +96,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             ServiceHandler.resetLocalTasks(this);
             ServiceHandler.setTaskToFirebase(null);
         }else if(v == disconnect_btn){
+            ServiceHandler.writeToFileNonAppend("",SettingsActivity.this, "login.txt");
             Intent toLogin = new Intent(this, AccountManagerActivity.class);
             toLogin.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivityIfNeeded(toLogin, 0);
@@ -109,7 +110,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     SettingsActivity.hasPerms = true;
-                    Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
+                    Log.d("Permission State", "Granted");
                     // in your app.
                 }  else {
                     Toast.makeText(this, "Permission failed, the app wont work!", Toast.LENGTH_LONG).show();

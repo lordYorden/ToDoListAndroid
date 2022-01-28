@@ -63,7 +63,7 @@ public class FirebaseHandler {
                     if(temp != null && temp.getUsername().equals(username) && temp.getPassword().equals(password)){
                         user = temp;
                         doseUserExist = true;
-                        Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show();
+                        Log.d("Connection State: ", "Login Successful");
                         Intent toTasks = new Intent(context, DisplayTasksActivity.class);
                         context.startActivity(toTasks);
                         break;
@@ -108,7 +108,7 @@ public class FirebaseHandler {
                 }
 
                 if(!doseUserExist){
-                    Toast.makeText(context, "Signup Successful", Toast.LENGTH_SHORT).show();
+                    Log.d("Connection State: ", "SignUp Successful");
                     user = new Account(username,password);
                     user.setTasks(new ArrayList<Task>());
                     users.child(username).setValue(user);

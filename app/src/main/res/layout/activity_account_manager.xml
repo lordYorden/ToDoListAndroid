@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".AccountManagerActivity">
 
-    <Button
+<!--    <Button
         android:id="@+id/to_tasks_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="to tasks"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false"/>-->
 
 </LinearLayout>

@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -101,10 +102,10 @@ public class DisplayTasksActivity extends AppCompatActivity {
 
     }
 
-    protected void onDestroy() {
+/*    protected void onDestroy() {
         super.onDestroy();
         ServiceHandler.setTaskToFirebase(arr);
-    }
+    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -113,7 +114,7 @@ public class DisplayTasksActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     SettingsActivity.hasPerms = true;
-                    Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
+                    Log.d("Permission State", "Granted");
                 }  else {
                     Toast.makeText(this, "Permission failed go to settings to toggle again, or else the app wont work!", Toast.LENGTH_LONG).show();
                     SettingsActivity.hasPerms = false;
@@ -128,7 +129,7 @@ public class DisplayTasksActivity extends AppCompatActivity {
         if(!isResume)
             return;
 
-        Toast.makeText(this, "resume", Toast.LENGTH_SHORT).show();
+        Log.d("App State", "resume");
         taskAdapter.clear();
         arr.clear();
         ArrayList<Task> temp = new ArrayList<Task>();
