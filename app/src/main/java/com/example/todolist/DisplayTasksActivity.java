@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -10,6 +11,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.example.todolist.MainActivity.arr;
 import static com.example.todolist.AccountManagerActivity.firebaseHandler;
@@ -54,6 +57,7 @@ public class DisplayTasksActivity extends AppCompatActivity {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +150,8 @@ public class DisplayTasksActivity extends AppCompatActivity {
             }
         });
 
+        Intent svc = new Intent(this,TaskNotificationService.class);
+        startService(svc);
     }
 
 /*    protected void onDestroy() {
