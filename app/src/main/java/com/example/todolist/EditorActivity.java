@@ -34,7 +34,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
     TextView display_info, date_selector_tv;
    /* Button resetTasks_btn;*/
     String imagePath;
-    EditText task_et;
+    EditText task_et, description_et;
     Uri image;
 
 
@@ -49,6 +49,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
         add_btn = findViewById(R.id.addToFile_btn);
         task_et = findViewById(R.id.task_et);
         date_selector_tv = findViewById(R.id.date_selector_tv);
+        description_et = findViewById(R.id.description_et);
         /*resetTasks_btn = findViewById(R.id.reset_tasks_btn);*/
 
         add_btn.setOnClickListener(this);
@@ -111,7 +112,13 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
             /*String data = task_et.getText() + "=" + imagePath + "=" + date_selector_tv.getText() + "\n";
             ServiceHandler.writeToFile(data, this, "tasks.txt");*/
             Uri toUpload = getImageUri(EditorActivity.this, ((BitmapDrawable)display_selected.getDrawable()).getBitmap());
-            FirebaseHandler.uploadImage(task_et.getText().toString(), AccountManagerActivity.firebaseHandler.user.getUsername(), date_selector_tv.getText().toString(), toUpload,  this);
+            try {
+                Task task = new Task(task_et.getText().toString(), "",  ServiceHandler.format.parse(date_selector_tv.getText().toString()), description_et.getText().toString());
+                FirebaseHandler.uploadImage(task, AccountManagerActivity.firebaseHandler.user.getUsername(), toUpload,  this);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                Toast.makeText(EditorActivity.this, "task failed", Toast.LENGTH_SHORT).show();
+            }
 
             /*try {
                 ServiceHandler.addTaskToFirebase(new Task(task_et.getText().toString(), imagePath, ServiceHandler.format.parse(date_selector_tv.getText().toString())));
