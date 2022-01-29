@@ -16,15 +16,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+
+import static com.example.todolist.MainActivity.arr;
 
 
 public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.OnCheckedChangeListener {
     Context context;
     ArrayList<Task> objects;
-    CheckBox fin_cb;
-    TextView task_tv;
+/*    CheckBox fin_cb;
+    TextView task_tv;*/
 
     public TaskAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull ArrayList<Task> objects) {
         super(context, resource, textViewResourceId, objects);
@@ -38,6 +42,9 @@ public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.On
         LayoutInflater layoutInflater = ((Activity)context).getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.tasks_layout, parent, false);
 
+        CheckBox fin_cb;
+        TextView task_tv;
+
         ImageView pic = view.findViewById(R.id.pic_iv);
         TextView date_tv = view.findViewById(R.id.date_tv);
         task_tv = view.findViewById(R.id.task_tv);
@@ -45,30 +52,65 @@ public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.On
 
         Task temp = objects.get(bitmap);
 
-        try
-        {
-            pic.setImageBitmap(ServiceHandler.fixPictureRotation(temp));
-            /*Toast.makeText(context, String.valueOf(rotation), Toast.LENGTH_SHORT).show();*/
-        }
-        catch (FileNotFoundException e)
-        {
-            Toast.makeText(context, "Image dose not exist anymore...Sorry :(", Toast.LENGTH_SHORT).show();
-        }
+        if(temp.pic.contains("https://"))
+
+            Picasso.get().load(temp.pic).into(pic);
+        else
+            pic.setImageBitmap(ServiceHandler.fixPictureRotation(temp, context));
+        /*Toast.makeText(context, String.valueOf(rotation), Toast.LENGTH_SHORT).show();*/
 
         date_tv.setText(ServiceHandler.format.format(temp.doDate));
-        task_tv.setText(temp.Task);
-        fin_cb.setOnCheckedChangeListener(this);
+        task_tv.setText(temp.task);
+        if(temp.isFin){
+            fin_cb.setChecked(true);
+            task_tv.setPaintFlags(task_tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+
+        fin_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    Toast.makeText(context, "task fin!", Toast.LENGTH_SHORT).show();
+                    //finish & marks task
+                    fin_cb.setChecked(true);
+                    task_tv.setPaintFlags(task_tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    temp.isFin = true;
+                    ServiceHandler.resetLocalTasks(context);
+                    ServiceHandler.addTasksFromArray(arr, context);
+                    ServiceHandler.setTaskToFirebase(arr);
+
+                } else{
+                    task_tv.setPaintFlags(0);
+                    temp.isFin = false;
+                    Toast.makeText(context, "undo", Toast.LENGTH_SHORT).show();
+                    ServiceHandler.resetLocalTasks(context);
+                    ServiceHandler.addTasksFromArray(arr, context);
+                    ServiceHandler.setTaskToFirebase(arr);
+
+                }
+            }
+        });
 
         return view;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked)
+        //gets the curr view and components
+        View view = (View) buttonView.getParent().getParent();
+        CheckBox fin_cb = view.findViewById(R.id.fin_cb);
+        TextView task_tv = view.findViewById(R.id.task_tv);
+
+        if(isChecked) {
             Toast.makeText(context, "task fin!", Toast.LENGTH_SHORT).show();
-            fin_cb.setChecked(false);
-            fin_cb.setClickable(false);
+            //finish & marks task
+            fin_cb.setChecked(true);
             task_tv.setPaintFlags(task_tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
+        } else{
+            task_tv.setPaintFlags(0);
+            Toast.makeText(context, "undo", Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

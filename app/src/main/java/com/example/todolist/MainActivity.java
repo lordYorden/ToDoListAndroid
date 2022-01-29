@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             displayNextNode();
         }
         else if (v == editor_switch_btn) {
-            Intent main_to_editor = new Intent(this, Editor.class);
+            Intent main_to_editor = new Intent(this, EditorActivity.class);
             startActivity(main_to_editor);
         }
     }
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "Image dose not exist anymore...Sorry :(", Toast.LENGTH_SHORT).show();
         }
 
-        check_btn.setText(curr.Task);
+        check_btn.setText(curr.task);
         check_btn.setChecked(false);
         Toast.makeText(this, ServiceHandler.format.format(curr.doDate), Toast.LENGTH_SHORT).show();
     }
