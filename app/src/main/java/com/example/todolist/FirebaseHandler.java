@@ -124,13 +124,13 @@ public class FirebaseHandler {
         });
     }
 
-    public static void uploadImage(String fileName, String fileLocation, String date , Uri photo, Context context){
+    public static void uploadImage(Task temp, String fileLocation, Uri photo, Context context){
         ProgressDialog pd = new ProgressDialog(context);
         pd.setMessage("Uploading photo");
         pd.show();
 
         if(photo != null) {
-            StorageReference imageRef = storage.getReference(fileLocation).child(fileName);
+            StorageReference imageRef = storage.getReference(fileLocation).child(temp.task);
             imageRef.putFile(photo).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull com.google.android.gms.tasks.Task<UploadTask.TaskSnapshot> task) {
@@ -141,14 +141,11 @@ public class FirebaseHandler {
                             Log.e("photoUrl", url);
                             pd.dismiss();
 
-                            String data = fileName + "$" + url + "$" + date +  "$" + false + "\n";
-                            ServiceHandler.writeToFile(data, context, "tasks.txt");
-                            try {
-                                ServiceHandler.addTaskToFirebase(new Task(fileName, url, ServiceHandler.format.parse(date)));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                                Toast.makeText(context, "task failed", Toast.LENGTH_SHORT).show();
-                            }
+                            /*String data = fileName + "$" + url + "$" + date +  "$" + false + "\n";*/
+                            //Task temp = new Task(fileName, url, ServiceHandler.format.parse(date));
+                            temp.pic = url;
+                            ServiceHandler.addTaskToFirebase(temp);
+                            ServiceHandler.writeToFile(temp.toString(), context, "tasks.txt");
                             Toast.makeText(context, "Task was added!", Toast.LENGTH_SHORT).show();
                         }
                     });
