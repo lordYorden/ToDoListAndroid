@@ -76,12 +76,13 @@
         android:id="@+id/display_selected"
         android:layout_width="wrap_content"
         android:layout_height="231dp"
+        android:layout_gravity="center"
         android:background="@null"
         android:maxWidth="200dp"
         android:maxHeight="320dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/example"
-        tools:srcCompat="@drawable/example" />
+        android:src="@drawable/link" />
+        <!--tools:srcCompat="@drawable/example"-->
 
     <!--<Button
         android:id="@+id/reset_tasks_btn"
