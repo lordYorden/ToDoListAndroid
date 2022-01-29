@@ -1,21 +1,46 @@
 package com.example.todolist;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Date;
 
 public class Task {
     String task;
     String pic;
+    String description;
     Date doDate;
+    Boolean isFin;
 
     Task(){
 
     }
 
-    Task(String Task, String pic, Date doDate)
+    Task(String Task, String pic, Date doDate, String description)
     {
         this.pic = pic;
         this.task = Task;
         this.doDate = doDate;
+        this.isFin = false;
+        this.description = description;
+    }
+
+    Task(String Task, String pic, Date doDate, String description, Boolean isFin)
+    {
+        this.pic = pic;
+        this.task = Task;
+        this.doDate = doDate;
+        this.isFin = isFin;
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return task + '$' +
+                 pic + '$' +
+                ServiceHandler.format.format(doDate) + "$" +
+                description + "$" +
+                isFin + '\n';
+
     }
 
     public String getPic() {
@@ -40,5 +65,21 @@ public class Task {
 
     public void setTask(String task) {
         this.task = task;
+    }
+
+    public Boolean getFin() {
+        return isFin;
+    }
+
+    public void setFin(Boolean fin) {
+        isFin = fin;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

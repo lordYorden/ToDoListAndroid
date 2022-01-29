@@ -3,13 +3,16 @@ package com.example.todolist;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -30,7 +34,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
     TextView display_info, date_selector_tv;
    /* Button resetTasks_btn;*/
     String imagePath;
-    EditText task_et;
+    EditText task_et, description_et;
     Uri image;
 
 
@@ -45,6 +49,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
         add_btn = findViewById(R.id.addToFile_btn);
         task_et = findViewById(R.id.task_et);
         date_selector_tv = findViewById(R.id.date_selector_tv);
+        description_et = findViewById(R.id.description_et);
         /*resetTasks_btn = findViewById(R.id.reset_tasks_btn);*/
 
         add_btn.setOnClickListener(this);
@@ -64,9 +69,9 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
                 image = imageUri;
                 /*display_info.setText(getRealPathFromURI(imageUri));*/
                 imagePath = getRealPathFromURI(imageUri);
-                InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                display_selected.setImageBitmap(selectedImage);
+                /*InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);*/
+                display_selected.setImageBitmap(ServiceHandler.fixPictureRotation(imagePath, EditorActivity.this));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -106,7 +111,14 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
 
             /*String data = task_et.getText() + "=" + imagePath + "=" + date_selector_tv.getText() + "\n";
             ServiceHandler.writeToFile(data, this, "tasks.txt");*/
-            FirebaseHandler.uploadImage(task_et.getText().toString(), AccountManagerActivity.firebaseHandler.user.getUsername(), date_selector_tv.getText().toString(), image,  this);
+            Uri toUpload = getImageUri(EditorActivity.this, ((BitmapDrawable)display_selected.getDrawable()).getBitmap());
+            try {
+                Task task = new Task(task_et.getText().toString(), "",  ServiceHandler.format.parse(date_selector_tv.getText().toString()), description_et.getText().toString());
+                FirebaseHandler.uploadImage(task, AccountManagerActivity.firebaseHandler.user.getUsername(), toUpload,  this);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                Toast.makeText(EditorActivity.this, "task failed", Toast.LENGTH_SHORT).show();
+            }
 
             /*try {
                 ServiceHandler.addTaskToFirebase(new Task(task_et.getText().toString(), imagePath, ServiceHandler.format.parse(date_selector_tv.getText().toString())));
@@ -137,5 +149,12 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         date_selector_tv.setText(String.format("%d/%d/%d", dayOfMonth, month+1, year));
+    }
+
+    private Uri getImageUri(Context context, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 }

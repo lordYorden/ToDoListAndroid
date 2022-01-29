@@ -54,6 +54,22 @@ public class ServiceHandler {
         return Bitmap.createBitmap(picToRotate, 0, 0, picToRotate.getWidth(), picToRotate.getHeight(), matrix, true);
     }
 
+    public static Bitmap fixPictureRotation(String imagePath, Context context) throws FileNotFoundException {
+        Bitmap picToRotate = null;
+        picToRotate = ServiceHandler.imageFromFile(imagePath);
+/*        catch(IOException e) {
+          Log.e("Download image", e.getMessage()) ;
+        }*/
+
+        Matrix matrix = new Matrix();
+        int rotation = ServiceHandler.getCameraPhotoOrientation(imagePath);
+        if(rotation == 270)
+            matrix.postRotate(-90);
+        else if(rotation == 90)
+            matrix.postRotate(90);
+        return Bitmap.createBitmap(picToRotate, 0, 0, picToRotate.getWidth(), picToRotate.getHeight(), matrix, true);
+    }
+
     public static int getCameraPhotoOrientation(String imagePath)
     {
         int rotate = 0;
@@ -82,11 +98,11 @@ public class ServiceHandler {
     }
 
     public static void addTasksFromArray(ArrayList<Task> tasks, Context context){
-        String data = "";
+        /*String data = "";*/
         for(Task task : tasks){
-            data = task.task + "$" + task.pic + "$" + format.format(task.doDate) + "\n";
+            /*data = task.task + "$" + task.pic + "$" + format.format(task.doDate) + "$" + task.isFin + "\n";*/
             /*Toast.makeText(context, data, Toast.LENGTH_SHORT).show();*/
-            writeToFile(data, context, "tasks.txt");
+            writeToFile(task.toString(), context, "tasks.txt");
         }
     }
 
@@ -105,8 +121,6 @@ public class ServiceHandler {
         user.setTasks(tasks);
         FirebaseHandler.db.getReference(String.format("users/%s/tasks", user.getUsername())).setValue(user.getTasks());
     }
-
-
 
     public static void writeToFile(String data, Context context, String filePath) {
         try {
@@ -158,7 +172,7 @@ public class ServiceHandler {
                     if(receiveString != null && !receiveString.equals("")) {
                         String[] strList = receiveString.split("\\$");
                         /*Toast.makeText(context, "added node", Toast.LENGTH_SHORT).show();*/
-                        arr.add(new Task(strList[0], strList[1], format.parse(strList[2])));
+                        arr.add(new Task(strList[0], strList[1], format.parse(strList[2]), strList[3] ,Boolean.parseBoolean(strList[4])));
                     }
                 } while (receiveString != null );
                 inputStream.close();
@@ -253,5 +267,6 @@ public class ServiceHandler {
             throw new FileNotFoundException("Could not find " + filePath);
         }
     }
+
 
 }

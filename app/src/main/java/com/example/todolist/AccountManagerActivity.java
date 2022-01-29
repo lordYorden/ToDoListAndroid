@@ -2,10 +2,15 @@ package com.example.todolist;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Objects;
 import java.util.regex.PatternSyntaxException;
 
 public class AccountManagerActivity extends AppCompatActivity implements View.OnClickListener {
@@ -36,13 +42,14 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_manager);
+        Objects.requireNonNull(getSupportActionBar()).hide(); //hides action bar
         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(internetConnectionReceiver, intentFilter);
 
-        //activity components
+        /*//activity components
         to_tasks_b = findViewById(R.id.to_tasks_b);
         to_tasks_b.setOnClickListener(this);
-
+*/
         //views and builder
         dialogBuilder = new AlertDialog.Builder(AccountManagerActivity.this);
         login_v = getLayoutInflater().inflate(R.layout.login_layout,null);
@@ -69,8 +76,8 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
                 {
                     /*Toast.makeText(AccountManagerActivity.this, "login successful", Toast.LENGTH_SHORT).show();*/
                     stayLoggedIn = login_cb.isChecked();
-                    Toast.makeText(AccountManagerActivity.this, "your email: "+login_username_et.getText().toString(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(AccountManagerActivity.this, "your password: "+login_password_et.getText().toString(), Toast.LENGTH_SHORT).show();
+                    /*Toast.makeText(AccountManagerActivity.this, "your email: "+login_username_et.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AccountManagerActivity.this, "your password: "+login_password_et.getText().toString(), Toast.LENGTH_SHORT).show();*/
                     firebaseHandler.Login(login_username_et.getText().toString(), login_password_et.getText().toString());
                 }
                 else
@@ -86,8 +93,8 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
                 isStart = false;
                 if(!signup_username_et.getText().toString().isEmpty() && !signup_password_et.getText().toString().isEmpty())
                 {
-                    Toast.makeText(AccountManagerActivity.this, "your email: "+signup_username_et.getText().toString(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(AccountManagerActivity.this, "your password: "+signup_password_et.getText().toString(), Toast.LENGTH_SHORT).show();
+                    /*Toast.makeText(AccountManagerActivity.this, "your email: "+signup_username_et.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AccountManagerActivity.this, "your password: "+signup_password_et.getText().toString(), Toast.LENGTH_SHORT).show();*/
                     firebaseHandler.signup(signup_username_et.getText().toString(), signup_password_et.getText().toString());
                 }
                 else
@@ -137,7 +144,7 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
             return;
         }
 
-        Toast.makeText(this, "toLogin", Toast.LENGTH_SHORT).show();
+        Log.d("State: ","Moving to login Screen");
         disconnect();
 
         dialog.cancel();
@@ -157,22 +164,33 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(internetConnectionReceiver);
-        Toast.makeText(this, "destroy", Toast.LENGTH_SHORT).show();
+        Log.d("State: ", "App Destroyed");
     }
 
     public void SaveLoginDetails(){
         if(stayLoggedIn && firebaseHandler.user != null) {
             ServiceHandler.writeToFileNonAppend(String.format("%s=%s", firebaseHandler.user.getUsername(), firebaseHandler.getUser().getPassword()), this, "login.txt");
-            Toast.makeText(this, "write login", Toast.LENGTH_SHORT).show();
+            Log.d("Debug", "Details Have been saved in the system");
         }
     }
 
     @Override
     public void onClick(View v) {
-        if(v == to_tasks_b) {
-            Intent to_tasks = new Intent(AccountManagerActivity.this, DisplayTasksActivity.class);
-            startActivity(to_tasks);
-        }
+        /*if(v == to_tasks_b) {
+            *//*Intent to_tasks = new Intent(AccountManagerActivity.this, DisplayTasksActivity.class);
+            startActivity(to_tasks);*//*
+            createNotificationChannel();
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "69")
+                    .setSmallIcon(R.drawable.example)
+                    .setContentTitle("Due soon")
+                    .setContentText("<task name>, Is due soon")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+            // notificationId is a unique int for each notification that you must define
+            notificationManager.notify(42, builder.build());
+        }*/
     }
 
     public void isAlreadyLogin(){
@@ -198,5 +216,21 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
         ServiceHandler.resetLocalTasks(this);
         ServiceHandler.writeToFileNonAppend("",this, "login.txt");
         isStart = true;
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "test";
+            String description = "this is just a test";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("69", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
