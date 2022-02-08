@@ -9,6 +9,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -107,13 +109,15 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
         to_sighup_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isStart) {
+                if (signup_v.getParent() != null) {
                     dialog.cancel();
                     ((ViewGroup) signup_v.getParent()).removeView(signup_v);
-                }else
-                    isStart = false;
+                }
+                if (dialog != null && dialog.isShowing())
+                    dialog.cancel();
                 dialogBuilder.setView(signup_v);
                 dialog = dialogBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
@@ -125,6 +129,7 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
                 ((ViewGroup)login_v.getParent()).removeView(login_v);
                 dialogBuilder.setView(login_v);
                 dialog = dialogBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
@@ -134,6 +139,7 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
         isAlreadyLogin();
         dialogBuilder.setView(login_v);
         dialog = dialogBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 
