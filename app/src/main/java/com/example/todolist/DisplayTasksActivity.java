@@ -11,6 +11,8 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -82,6 +84,8 @@ public class DisplayTasksActivity extends AppCompatActivity {
         tasks_lv.setItemsCanFocus(true);*/
         isResume = false;
 
+
+
         ArrayList<Task> tasks = firebaseHandler.user.getTasks();
         if(tasks == null)
             tasks = new ArrayList<Task>();
@@ -144,6 +148,7 @@ public class DisplayTasksActivity extends AppCompatActivity {
                     isFirst = false;
                 dialogBuilder.setView(task_information_display);
                 alertDialog = dialogBuilder.create();
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 alertDialog.show();
 
 
@@ -214,6 +219,11 @@ public class DisplayTasksActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 
 }

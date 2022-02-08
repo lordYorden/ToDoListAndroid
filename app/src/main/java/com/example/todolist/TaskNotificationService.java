@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -54,7 +55,7 @@ public class TaskNotificationService extends Service {
                             }
                         }
 
-                        if(!toDisplay.isEmpty()) {
+                        if(toDisplay != null  && !toDisplay.isEmpty()) {
                             createNotificationChannel("Task Due", "Notify when the end of a tasks are near.", "10");
                             builder = new NotificationCompat.Builder(TaskNotificationService.this, "10")
                                     .setSmallIcon(R.drawable.app_icon_mid)
@@ -103,6 +104,7 @@ public class TaskNotificationService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.d("Service:", "Service stopped");
 
     }
 

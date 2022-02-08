@@ -18,7 +18,8 @@
         <service
             android:name=".TaskNotificationService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:stopWithTask="true">
         </service>
 
         <receiver android:name=".InternetConnectionReceiver">
