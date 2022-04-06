@@ -117,6 +117,7 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
                     dialog.cancel();
                 dialogBuilder.setView(signup_v);
                 dialog = dialogBuilder.create();
+                dialog.setCancelable(false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -129,6 +130,7 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
                 ((ViewGroup)login_v.getParent()).removeView(login_v);
                 dialogBuilder.setView(login_v);
                 dialog = dialogBuilder.create();
+                dialog.setCancelable(false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -139,6 +141,7 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
         isAlreadyLogin();
         dialogBuilder.setView(login_v);
         dialog = dialogBuilder.create();
+        dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
@@ -157,6 +160,7 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
         ((ViewGroup)login_v.getParent()).removeView(login_v);
         dialogBuilder.setView(login_v);
         dialog = dialogBuilder.create();
+        dialog.setCancelable(false);
         dialog.show();
     }
 

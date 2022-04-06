@@ -130,7 +130,9 @@ public class DisplayTasksActivity extends AppCompatActivity {
                                         ServiceHandler.addTasksFromArray(arr, DisplayTasksActivity.this);
                                         ServiceHandler.setTaskToFirebase(arr);
                                         ServiceHandler.sortList(DisplayTasksActivity.this);
-                                        //alertDialog.cancel();
+                                        alertDialog.cancel();
+                                        ((ViewGroup) task_information_display.getParent()).removeView(task_information_display);
+                                        isFirst = true;
                                     }
                                 })
 
