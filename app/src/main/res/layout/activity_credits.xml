@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CreditsActivity"
+    android:paddingLeft="60dp"
+    android:paddingRight="60dp">
+
+    <com.example.todolist.ScrollingTextView
+        android:id="@+id/credits_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="App made by @LordYorden on GitHub\n
+        \nDesign: Yarden Perets\n
+        \nCode: Yarden Perets
+        \n\n\n\nApp version: 1.0.1v
+        \n\nPrivacy Policy:
+        \n\nThis app dosen't even keeps your data secure.
+        \nI'm serious Please don't save private passwords on this app.
+        \nYou will get hacked by some stupid guy that will figure out my Firebase password.
+        \nI'm so lazy your passwords aren't even encrypted.
+        \nAnd in case you've already been hacked, Please go to haveibeenpwned.com and enter your details there to see if you've been hacked.
+        \n\nP.s: just kidding the app is secure and encrypted. Or am I?
+        \nYou will never know (Evil Laughter...)
+        \n\n\n\nBeta testers:
+        \n\nLegit every single person I know. And as i Said before I am way too lazy to get it over with.
+        \n\n\n\nAbout the project:
+        \n\nAs part of the Israely bagrot exam, We each get to make an android app that has to follow a certain guidelines. This is my android project named Todo-List.
+        \n\nHope you will enjoy it :)"
+        android:textSize="18sp"/>
+
+</LinearLayout>

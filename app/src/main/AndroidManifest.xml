@@ -15,12 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".CreditsActivity"></activity>
+
         <service
             android:name=".TaskNotificationService"
             android:enabled="true"
             android:exported="true"
-            android:stopWithTask="true">
-        </service>
+            android:stopWithTask="true"></service>
 
         <receiver android:name=".InternetConnectionReceiver">
             <intent-filter>
