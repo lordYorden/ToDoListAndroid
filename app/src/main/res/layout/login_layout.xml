@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="20dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:elevation="5dp"
+    android:layout_gravity="center">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
     android:padding="60dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"/>
 
     <EditText
         android:id="@+id/login_username_et"
@@ -24,19 +44,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"/>
-
-    <Button
-        android:id="@+id/login_b"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:textAllCaps="false" />
-    
     <Space
         android:layout_width="wrap_content"
         android:layout_height="10dp"/>
@@ -46,7 +55,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="Keep me logged in"
+        android:checked="false"
+        android:text="Keep me signed in"
+        android:textAllCaps="false" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"/>
+
+    <Button
+        android:id="@+id/login_b"
+        android:background="@drawable/login_shape_b"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textStyle="bold"
+        android:textSize="24dp"
         android:textAllCaps="false" />
 
     <Space
@@ -57,7 +81,7 @@
         android:id="@+id/to_signup_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Not Registered"
-        android:textAllCaps="false"/>
-
+        android:text="Don\'t have an account? Sign Up"
+        android:textAllCaps="false" />
 </LinearLayout>
+</androidx.cardview.widget.CardView>
