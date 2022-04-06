@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,7 +33,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import static com.example.todolist.MainActivity.arr;
 import static com.example.todolist.AccountManagerActivity.firebaseHandler;
@@ -217,6 +215,10 @@ public class DisplayTasksActivity extends AppCompatActivity {
             Intent toSettings = new Intent(this, SettingsActivity.class);
             startActivity(toSettings);
             isResume = true;
+        } else if (itemId == R.id.credits){
+            Log.d("New Screen", "CreditsActivity");
+            Intent toCredits = new Intent(DisplayTasksActivity.this, CreditsActivity.class);
+            startActivity(toCredits);
         } else {
             return false;
         }
