@@ -21,6 +21,7 @@ public class InternetConnectionReceiver extends BroadcastReceiver {
         if(isConnected)
             Log.d("Internet State", "Connected");
         else
+            Toast.makeText(context, "No Internet Connection!", Toast.LENGTH_SHORT).show();
             Log.d("Internet State","No Internet Connection!");
     }
 }
