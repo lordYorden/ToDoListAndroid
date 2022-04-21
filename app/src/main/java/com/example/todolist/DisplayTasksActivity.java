@@ -11,7 +11,8 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.icu.util.Calendar;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +33,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import static com.example.todolist.MainActivity.arr;
 import static com.example.todolist.AccountManagerActivity.firebaseHandler;
@@ -82,6 +82,8 @@ public class DisplayTasksActivity extends AppCompatActivity {
         tasks_lv.setItemsCanFocus(true);*/
         isResume = false;
 
+
+
         ArrayList<Task> tasks = firebaseHandler.user.getTasks();
         if(tasks == null)
             tasks = new ArrayList<Task>();
@@ -126,7 +128,9 @@ public class DisplayTasksActivity extends AppCompatActivity {
                                         ServiceHandler.addTasksFromArray(arr, DisplayTasksActivity.this);
                                         ServiceHandler.setTaskToFirebase(arr);
                                         ServiceHandler.sortList(DisplayTasksActivity.this);
-                                        //alertDialog.cancel();
+                                        alertDialog.cancel();
+                                        ((ViewGroup) task_information_display.getParent()).removeView(task_information_display);
+                                        isFirst = true;
                                     }
                                 })
 
@@ -144,6 +148,7 @@ public class DisplayTasksActivity extends AppCompatActivity {
                     isFirst = false;
                 dialogBuilder.setView(task_information_display);
                 alertDialog = dialogBuilder.create();
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 alertDialog.show();
 
 
@@ -210,10 +215,19 @@ public class DisplayTasksActivity extends AppCompatActivity {
             Intent toSettings = new Intent(this, SettingsActivity.class);
             startActivity(toSettings);
             isResume = true;
+        } else if (itemId == R.id.credits){
+            Log.d("New Screen", "CreditsActivity");
+            Intent toCredits = new Intent(DisplayTasksActivity.this, CreditsActivity.class);
+            startActivity(toCredits);
         } else {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 
 }

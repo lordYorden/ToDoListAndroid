@@ -58,14 +58,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         is_perm_tv = findViewById(R.id.is_perms_tv);
         perm_check_btn = findViewById(R.id.perms_check_btn);
         sort_mode_sp = findViewById(R.id.sort_mode_sp);
-        reset_tasks_btn = findViewById(R.id.reset_tasks_btn);
+        //reset_tasks_btn = findViewById(R.id.reset_tasks_btn);
         disconnect_btn = findViewById(R.id.disconnect_btn);
 
 
         is_perm_tv.setText(checkPermMessage());
         perm_check_btn.setOnClickListener(this);
         sort_mode_sp.setOnItemSelectedListener(this);
-        reset_tasks_btn.setOnClickListener(this);
+        //reset_tasks_btn.setOnClickListener(this);
         disconnect_btn.setOnClickListener(this);
     }
 
@@ -87,8 +87,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v == perm_check_btn) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-                    ActivityCompat.requestPermissions(SettingsActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERM_REQUEST_CODE);
+                if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(SettingsActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, PERM_REQUEST_CODE);
                 }
             }
         }else if(v == reset_tasks_btn){

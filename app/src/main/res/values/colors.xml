@@ -7,6 +7,6 @@
     <color name="DarkColorAccent">#D81B60</color>
     <color name="BlueColorAccent">#038cfc</color>
     <color name="White">#ffffff</color>
-    <color name="dark_grey">#222930</color>
-    <color name="LightGray">#3a3a3a</color>
+    <color name="dark_grey">#E60C0C0C</color>
+    <color name="LightGray">#CE000000</color>
 </resources>
