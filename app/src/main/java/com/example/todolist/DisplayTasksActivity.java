@@ -93,6 +93,7 @@ public class DisplayTasksActivity extends AppCompatActivity {
         ServiceHandler.addTasksFromArray(arr, this);
 /*         ServiceHandler.readFromFileToArr("tasks.txt", this, arr);*/
 
+        //when task in clicked displays its full info
         taskAdapter = new TaskAdapter(this, 0, 0, arr);
         tasks_lv.setAdapter(taskAdapter);
         tasks_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -164,6 +165,7 @@ public class DisplayTasksActivity extends AppCompatActivity {
         ServiceHandler.setTaskToFirebase(arr);
     }*/
 
+    //checks if permission request for media and camera was successful
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -186,6 +188,7 @@ public class DisplayTasksActivity extends AppCompatActivity {
         if(!isResume)
             return;
 
+        //when the users return to this screen updates displayed tasks
         Log.d("App State", "resume");
         taskAdapter.clear();
         arr.clear();
@@ -196,6 +199,7 @@ public class DisplayTasksActivity extends AppCompatActivity {
         isResume = false;
     }
 
+    //sets the menu in the corner
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -203,6 +207,7 @@ public class DisplayTasksActivity extends AppCompatActivity {
         return true;
     }
 
+    //checks for menu selection and preforms it
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId =  item.getItemId();
@@ -225,9 +230,9 @@ public class DisplayTasksActivity extends AppCompatActivity {
         return true;
     }
 
+    //disables the back option
     @Override
     public void onBackPressed() {
-        return;
     }
 
 }

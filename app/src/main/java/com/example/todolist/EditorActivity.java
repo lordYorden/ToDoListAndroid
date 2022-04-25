@@ -49,6 +49,8 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
     String imagePath;
     EditText task_et, description_et;
     Uri image;
+
+    //sets an enum for external request codes
     enum reqCodes {GALLERY, CAMERA, NO_OPERATION;
 
         public static reqCodes valueOf(int value) {
@@ -85,6 +87,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    //checks for the request type and set the displayed image based on it
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
@@ -95,7 +98,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
                 image = imageUri;
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
                 display_selected.setImageBitmap(photo);
-                scaleImage(display_selected);
+                scaleImage(display_selected); //fixes the image in the display imageView
 
             }
             else if(reqCodes.valueOf(reqCode) == reqCodes.GALLERY) {
@@ -107,6 +110,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
                     imagePath = getRealPathFromURI(imageUri);
                 /*InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);*/
+                    //fixes image rotation when image is retrieved from the gallery
                     display_selected.setImageBitmap(ServiceHandler.fixPictureRotation(imagePath, EditorActivity.this));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -119,6 +123,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    //gets the full path of a gallery image
     public String getRealPathFromURI(Uri contentUri) {
         String res = null;
         String[] proj = { MediaStore.Images.Media.DATA };
@@ -138,7 +143,7 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
             /*Intent photoPickerIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE*//*Intent.ACTION_PICK*//*);
             photoPickerIntent.setType("image/*");
             startActivityForResult(photoPickerIntent, 0);*/
-            selectImage(EditorActivity.this);
+            selectImageSource(EditorActivity.this);
         }
         else if (v == add_btn)
         {
@@ -183,7 +188,11 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void selectImage(Context context)
+    /**
+     * prompts the user with a selection for camera or gallery as an image source
+     * @param context used to show the prompt
+     */
+    private void selectImageSource(Context context)
     {
         final CharSequence[] options = {"Capture Photo", "Select from gallery"};
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -214,11 +223,19 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
+    //display the selected date in its label with correct format
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         date_selector_tv.setText(String.format("%d/%d/%d", dayOfMonth, month+1, year));
     }
 
+
+    /**
+     * creates a uri to upload for an image given
+     * @param context used for debugging purposes (prints a Toast)
+     * @param inImage inputImage
+     * @return the uri to upload to firebase's storage
+     */
     private Uri getImageUri(Context context, Bitmap inImage) {
         //ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 
@@ -242,7 +259,14 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
         return path;
     }
 
-    //code from https://stackoverflow.com/questions/8232608/fit-image-into-imageview-keep-aspect-ratio-and-then-resize-imageview-to-image-d
+
+    /**
+     * code from https://stackoverflow.com/questions/8232608/fit-image-into-imageview-keep-aspect-ratio-and-then-resize-imageview-to-image-d
+     * used to fix image scaling when took from camera
+     * @param view the view that contain the image
+     * @throws NoSuchElementException if the view dose not match
+     */
+
     private void scaleImage(ImageButton view) throws NoSuchElementException  {
         // Get bitmap from the the ImageView.
         Bitmap bitmap = null;
@@ -305,6 +329,13 @@ public class EditorActivity extends AppCompatActivity implements View.OnClickLis
         Log.i("Test", "done");
     }
 
+    /**
+     * helper method
+     * converts a value in dp to pixel
+     * for calculation purposes
+     * @param dp value in dp
+     * @return value in pixels
+     */
     private int dpToPx(int dp) {
         float density = getApplicationContext().getResources().getDisplayMetrics().density;
         return Math.round((float)dp * density);

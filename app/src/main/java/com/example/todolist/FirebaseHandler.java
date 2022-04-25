@@ -29,22 +29,33 @@ import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
 public class FirebaseHandler {
+    //the date base storage
     public static final FirebaseDatabase db = FirebaseDatabase.getInstance();
     public static final FirebaseStorage storage = FirebaseStorage.getInstance();
-    public Account user;
-    private Context context;
+    public Account user; //user data
+    private final Context context; //used for debugging purposes (prints a Toast) in case of a failiure
 
     public FirebaseHandler(Context context) {
         this.user = null;
         this.context = context;
     }
 
+    /**
+     * deletes the user from local storage
+     */
     public void disconnect(){
         user = null;
     }
 
+    /**
+     * validates login information
+     * and preforms a login into the system
+     * @param username username info
+     * @param password password info
+     */
     public void Login(String username, String password) {
         user = null;
+        //gets all the users from firebase and searches for the desired user
         DatabaseReference users = db.getReference("users");
         Query q = users.orderByValue();
         q.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -60,6 +71,7 @@ public class FirebaseHandler {
                         Log.e("firebase", e.getMessage());
                     }
 
+                    //when data is validated moves the user to home screen
                     if(temp != null && temp.getUsername().equals(username) && temp.getPassword().equals(password)){
                         user = temp;
                         doseUserExist = true;
@@ -84,6 +96,13 @@ public class FirebaseHandler {
 
     }
 
+    /**
+     * checks if the user exist
+     * and if not registers them as a new user
+     * in the application
+     * @param username username info
+     * @param password password info
+     */
     public void signup(String username, String password) {
         user = null;
         DatabaseReference users = db.getReference("users");
@@ -124,6 +143,14 @@ public class FirebaseHandler {
         });
     }
 
+    /**
+     * uploads an image to firebase storage
+     * with its task
+     * @param temp the task to upload
+     * @param fileLocation location to upload to in firebase's storage
+     * @param photo image uri to upload
+     * @param context used for debugging purposes (prints a Toast)
+     */
     public static void uploadImage(Task temp, String fileLocation, Uri photo, Context context){
         ProgressDialog pd = new ProgressDialog(context);
         pd.setMessage("Uploading photo");

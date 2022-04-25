@@ -43,6 +43,7 @@ public class TaskNotificationService extends Service {
         new Thread(new Runnable() {
             public void run() {
                 while (true) {
+                    //checks for close tasks
                     tasks = AccountManagerActivity.firebaseHandler.user.getTasks();
                     if(tasks != null){
                         for (Task t : tasks) {
@@ -55,6 +56,7 @@ public class TaskNotificationService extends Service {
                             }
                         }
 
+                        //informs the user on upcoming tasks
                         if(toDisplay != null  && !toDisplay.isEmpty()) {
                             createNotificationChannel("Task Due", "Notify when the end of a tasks are near.", "10");
                             builder = new NotificationCompat.Builder(TaskNotificationService.this, "10")
@@ -68,6 +70,8 @@ public class TaskNotificationService extends Service {
                         }
                     }
 
+
+                    //sleeps for an hour
                     try {
                         Thread.sleep(3600000);
                     } catch (InterruptedException e) {
@@ -108,6 +112,12 @@ public class TaskNotificationService extends Service {
 
     }
 
+    /**
+     * creates a notification channel
+     * @param name channel name
+     * @param description channel description
+     * @param channelID channel ID
+     */
     private void createNotificationChannel(String name, String description, String channelID) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library

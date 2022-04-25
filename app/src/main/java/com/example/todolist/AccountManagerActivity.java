@@ -177,6 +177,9 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
         Log.d("State: ", "App Destroyed");
     }
 
+    /**
+     * when called saves the login info in local storage (login.txt)
+     */
     public void SaveLoginDetails(){
         if(stayLoggedIn && firebaseHandler.user != null) {
             ServiceHandler.writeToFileNonAppend(String.format("%s=%s", firebaseHandler.user.getUsername(), firebaseHandler.getUser().getPassword()), this, "login.txt");
@@ -203,6 +206,9 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
         }*/
     }
 
+    /**
+     * before login checks if there are login details saved
+     */
     public void isAlreadyLogin(){
         String[] loginDetails;
         String fileLoginDetails = ServiceHandler.readFromFile("login.txt", this);
@@ -220,27 +226,14 @@ public class AccountManagerActivity extends AppCompatActivity implements View.On
         firebaseHandler.Login(loginDetails[0], loginDetails[1]);
     }
 
+    /**
+     * when called deletes user info from local storage (login.txt & task.txt)
+     */
     public void disconnect(){
         stayLoggedIn = false;
         firebaseHandler.disconnect();
         ServiceHandler.resetLocalTasks(this);
         ServiceHandler.writeToFileNonAppend("",this, "login.txt");
         isStart = true;
-    }
-
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "test";
-            String description = "this is just a test";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("69", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
     }
 }

@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     Spinner sort_mode_sp;
     final int PERM_REQUEST_CODE = 1;
 
-    /*final int NAME_AZ = 1, NAME_ZA = 2, DATE_NEAREST = 3, DATE_LATEST = 4;*/
+    //enum for sort types
     enum SortModes {NO_SELECTION, NAME_AZ, NAME_ZA, DATE_NEAREST, DATE_LATEST;
 
         public static SortModes valueOf(int value) {
@@ -76,6 +76,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         sort_mode_sp.setSelection(selection.ordinal());
     }
 
+    /**
+     * helper method
+     * checks for camera and media perms
+     * @return has perms?
+     */
     public String checkPermMessage(){
         if(hasPerms)
             return "Has permissions";
@@ -103,23 +108,22 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    //checks if permission request for media and camera was successful
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case PERM_REQUEST_CODE:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    SettingsActivity.hasPerms = true;
-                    Log.d("Permission State", "Granted");
-                    // in your app.
-                }  else {
-                    Toast.makeText(this, "Permission failed, the app wont work!", Toast.LENGTH_LONG).show();
-                    SettingsActivity.hasPerms = false;
-                }
-                return;
+        if (requestCode == PERM_REQUEST_CODE) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                SettingsActivity.hasPerms = true;
+                Log.d("Permission State", "Granted");
+                // in your app.
+            } else {
+                Toast.makeText(this, "Permission failed, the app wont work!", Toast.LENGTH_LONG).show();
+                SettingsActivity.hasPerms = false;
+            }
         }
     }
 
+    //checks for selected sort mode and sort tasks base on it
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         selection = SettingsActivity.SortModes.valueOf(position);

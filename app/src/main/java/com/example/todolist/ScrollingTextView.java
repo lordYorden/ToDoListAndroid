@@ -5,7 +5,12 @@ import android.util.AttributeSet;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 import android.widget.TextView;
-
+/**
+ * A TextView that scrolls it contents across the screen, in a similar fashion as movie credits roll
+ * across the theater screen.
+ *
+ * @author Matthias Kaeppler
+ */
 public class ScrollingTextView extends androidx.appcompat.widget.AppCompatTextView implements Runnable {
 
     private static final float DEFAULT_SPEED = 15.0f;

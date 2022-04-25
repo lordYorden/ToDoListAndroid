@@ -52,6 +52,7 @@ public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.On
 
         Task temp = objects.get(bitmap);
 
+        //checks for image source (firebase or device storage)
         if(temp.pic.contains("https://"))
 
             Picasso.get().load(temp.pic).into(pic);
@@ -66,6 +67,7 @@ public class TaskAdapter extends ArrayAdapter<Task> implements CompoundButton.On
             task_tv.setPaintFlags(task_tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
+        //if tasks is finish upload firebase's real time database
         fin_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
